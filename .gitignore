@@ -1,0 +1,60 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+
+# Production / Build
+dist/
+build/
+.next/
+out/
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# Android / iOS Native Folders (Build files only)
+**/android/app/build/
+**/android/.gradle/
+**/android/local.properties
+**/android/app/release/
+**/android/app/debug/
+*.apk
+*.aab
+
+# IDE / Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# Temp / Scratch
+assets/icon-foreground.png
+assets/icon-background.png
+assets/icon-only.png
+assets/logo-only.png
+assets/splash.png
+assets/splash-dark.png
+tmp/
+temp/

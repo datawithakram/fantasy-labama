@@ -1,0 +1,11 @@
+admin panel 
+- ui of the admin panel 
+- deadline logic in admin panel how it work firstly and then did it 
+- add button to create league and add all users or بعض users 
+frontend 
+- modal in the app of hint or warning messages
+- fix logic of bench and when the user in the transfer show the pitch with lineup have 2-5-5-3 not bench shown 
+- fix league creating and fix join league 
+- fix this "insert or update on table "user_teams" violates foreign key constraint "user_teams_user_id_fkey""
+- in the squad selection fix ui of players to be shown like fifa or efootball not like this its from 1990 
+- one user press on player make it shown player information like fpl
