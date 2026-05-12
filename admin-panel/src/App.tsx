@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, NavLink, Navigate } from 'react-router-dom';
-import { supabase } from './lib/supabase';
+import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
 import Clubs from './pages/Clubs';

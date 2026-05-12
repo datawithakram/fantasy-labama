@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { supabase } from '../lib/supabase';
 import { Trophy, Lock, Mail, ArrowRight, Loader2 } from 'lucide-react';
 
 const LoginPage = () => {
