@@ -11,7 +11,7 @@ import { History } from './pages/History';
 import { supabase } from './lib/supabase';
 import { useStore } from './store/useStore';
 import { registerPush } from './lib/pushManager';
-import { Layout, Users, Repeat, Trophy, BarChart2, User, LogOut, Sun, Moon, Zap } from 'lucide-react';
+import { Layout, Users, Repeat, Trophy, BarChart2, User, Sun, Moon, Zap } from 'lucide-react';
 
 function App() {
   const [session, setSession] = useState<any>(null);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useStore } from '../store/useStore';
-import { Trophy, Plus, Users, ChevronRight, Hash, Globe, LogIn, CheckCircle2, Shield, Zap, Search, LayoutGrid, List } from 'lucide-react';
+import { Trophy, Plus, Users, ChevronRight, Hash, Globe, LogIn, CheckCircle2, Shield, Zap, Search } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 interface League {

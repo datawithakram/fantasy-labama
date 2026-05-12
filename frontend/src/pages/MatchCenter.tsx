@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useStore } from '../store/useStore';
-import { RefreshCw, AlertCircle, TrendingUp, Calendar, Info, Clock, PlayCircle, CheckCircle2, XCircle, Zap, Activity, Trophy, Search, ChevronRight, Shield } from 'lucide-react';
+import { RefreshCw, TrendingUp, Clock, PlayCircle, CheckCircle2, XCircle, Zap, Activity, Trophy, ChevronRight, Shield } from 'lucide-react';
 import { cn } from '../lib/utils';
 import type { Player } from '../store/teamStore';
 

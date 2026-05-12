@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { Mail, Lock, LogIn, UserPlus, Zap, Shield, Trophy } from 'lucide-react';
-import { cn } from '../lib/utils';
+import { Mail, Lock, LogIn, UserPlus, Shield, Trophy } from 'lucide-react';
 
 export default function Auth() {
   const [loading, setLoading] = useState(false);
@@ -27,7 +26,7 @@ export default function Auth() {
         console.log('[Auth] Supabase signUp success:', data.user?.id);
 
         if (data.user) {
-          const { error: insertError } = await supabase.from('users').insert({
+          const { error: _insertError } = await supabase.from('users').insert({
             id: data.user.id,
             username: email.split('@')[0],
             provider: 'email'

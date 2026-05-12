@@ -1,7 +1,6 @@
 import { useStore } from '../store/useStore';
 import { User, Mail, Shield, Settings, LogOut, Bell, ChevronRight, HelpCircle, UserCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { cn } from '../lib/utils';
 
 export function Profile() {
   const { user, signOut } = useStore();

@@ -15,14 +15,14 @@ interface Club {
 
 export function TeamBuilder() {
   const { user } = useStore();
-  const { selectedPlayers, budget, addPlayer, removePlayer, toggleChip, setCaptain, setInitialTeam } = useTeamStore();
+  const { selectedPlayers, budget, addPlayer, removePlayer, toggleChip, setInitialTeam } = useTeamStore();
   const [players, setPlayers] = useState<any[]>([]);
   const [clubs, setClubs] = useState<Record<number, Club>>({});
   const [, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [hasTeam, setHasTeam] = useState(false);
   
-  const [currentRound, setCurrentRound] = useState<any>(null);
+  const [, setCurrentRound] = useState<any>(null);
   const [deadlinePassed, setDeadlinePassed] = useState(false);
 
   const [alertState, setAlertState] = useState<{ isOpen: boolean; type: AlertType; title: string; message: string }>({

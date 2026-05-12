@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useStore } from '../store/useStore';
 import { useTeamStore, type TeamPlayer, type Position } from '../store/teamStore';
-import { Search, CheckCircle2, ShieldAlert, X, ArrowRightLeft, Plus, DollarSign, Zap, TrendingUp, Info, Save, Loader2, Users as UsersIcon, Shield } from 'lucide-react';
+import { Search, CheckCircle2, ShieldAlert, X, ArrowRightLeft, Plus, DollarSign, TrendingUp, Info, Loader2, Shield } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { AlertModal, type AlertType } from '../components/Alerts';
+// import { AlertModal, type AlertType } from '../components/Alerts';
 import { PlayerPickerModal } from '../components/PlayerPickerModal';
 import { PlayerInfoModal } from '../components/PlayerInfoModal';
 
@@ -22,7 +22,7 @@ export function Transfers() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ text: string, type: 'success' | 'error' } | null>(null);
 
-  const [currentRound, setCurrentRound] = useState<any>(null);
+  const [, setCurrentRound] = useState<any>(null);
   const [deadlinePassed, setDeadlinePassed] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState('');
