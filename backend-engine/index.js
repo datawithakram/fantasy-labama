@@ -15,8 +15,8 @@ const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 // Push Notifications Setup
 webpush.setVapidDetails(
   'mailto:admin@fantasylabama.com',
-  'BEnN9h8ldd3HGMSr4S63ZwWPfCMjN8c7J40ZjO5k9tTxXOO24Vwes-U3j3p9GHfjZ3Y02lowOM1zXmYBLat89gw',
-  'TV-aj-Pwc-9m78chKTuvkhd8m0I89zSuNob3ufQ8sM8'
+  process.env.VAPID_PUBLIC_KEY,
+  process.env.VAPID_PRIVATE_KEY
 );
 
 const supabase = createClient(supabaseUrl, supabaseKey, {
