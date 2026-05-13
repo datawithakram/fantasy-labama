@@ -116,12 +116,12 @@ export function TeamBuilder() {
 
     if (deadlinePassed) {
       console.warn('[TeamBuilder] Deadline passed, entry blocked');
-      setAlertState({ isOpen: true, type: 'error', title: 'Deadline Passed', message: 'The deadline for this gameweek has passed.' });
+      setAlertState({ isOpen: true, type: 'error', title: 'انتهى الوقت', message: 'لقد انتهى الوقت المحدد لهذه الجولة.' });
       return;
     }
     if (selectedPlayers.length !== 15) {
       console.warn('[TeamBuilder] Incomplete squad:', selectedPlayers.length, '/ 15');
-      setAlertState({ isOpen: true, type: 'error', title: 'Incomplete Squad', message: 'You must select exactly 15 players.' });
+      setAlertState({ isOpen: true, type: 'error', title: 'تشكيلة غير مكتملة', message: 'يجب عليك اختيار 15 لاعباً بالضبط.' });
       return;
     }
 
@@ -175,14 +175,14 @@ export function TeamBuilder() {
       const result = await response.json();
       console.log('[TeamBuilder] API Response:', { status: response.status, data: result });
 
-      if (!response.ok) throw new Error(result.error || 'Failed to save team');
+      if (!response.ok) throw new Error(result.error || 'فشل في حفظ التشكيلة');
 
       setHasTeam(true);
       console.log('[TeamBuilder] Squad saved successfully and locked');
-      setAlertState({ isOpen: true, type: 'success', title: 'Success', message: 'Squad entered successfully! Modifications now only via Transfers.' });
+      setAlertState({ isOpen: true, type: 'success', title: 'تم بنجاح', message: 'تم حفظ التشكيلة بنجاح! التعديلات الآن تتم عبر صفحة الانتقالات فقط.' });
     } catch (err: any) {
       console.error('[TeamBuilder] Save error:', err);
-      setAlertState({ isOpen: true, type: 'error', title: 'Error', message: err.message || 'Failed to save team.' });
+      setAlertState({ isOpen: true, type: 'error', title: 'خطأ', message: err.message || 'فشل في حفظ التشكيلة.' });
     } finally {
       setSaving(false);
     }
@@ -206,7 +206,7 @@ export function TeamBuilder() {
             <UserPlus className="h-5 w-5 md:h-6 md:w-6 text-white/20 group-hover:scale-110 transition-transform" />
           </div>
           <div className="bg-black/40 backdrop-blur-md text-white text-[8px] md:text-[10px] font-black px-2 md:px-3 py-1 rounded-full uppercase tracking-tighter">
-            {pos}
+            {pos === 'GK' ? 'حارس' : pos === 'DEF' ? 'دفاع' : pos === 'MID' ? 'وسط' : 'هجوم'}
           </div>
         </button>
       );
@@ -246,21 +246,21 @@ export function TeamBuilder() {
         <div className="mt-1 md:mt-2 w-full flex flex-col items-center shadow-lg rounded-lg overflow-hidden max-w-[70px] md:max-w-none">
           <div className="bg-slate-900 text-white text-[8px] md:text-xs font-black px-1 md:px-2 py-0.5 md:py-1 w-full text-center truncate border-b border-white/5 relative">
             {player.is_captain && (
-               <span className="absolute left-1 top-1/2 -translate-y-1/2 bg-amber-500 text-slate-900 text-[6px] md:text-[8px] w-3 h-3 md:w-4 md:h-4 flex items-center justify-center rounded-sm font-black">
+               <span className="absolute right-1 top-1/2 -translate-y-1/2 bg-amber-500 text-slate-900 text-[6px] md:text-[8px] w-3 h-3 md:w-4 md:h-4 flex items-center justify-center rounded-sm font-black">
                  {useTeamStore.getState().activeChips.includes('triple_captain') ? 'TC' : 'C'}
                </span>
             )}
             {player.is_vice && (
-               <span className="absolute left-1 top-1/2 -translate-y-1/2 bg-slate-200 text-slate-900 text-[6px] md:text-[8px] w-3 h-3 md:w-4 md:h-4 flex items-center justify-center rounded-sm font-black">V</span>
+               <span className="absolute right-1 top-1/2 -translate-y-1/2 bg-slate-200 text-slate-900 text-[6px] md:text-[8px] w-3 h-3 md:w-4 md:h-4 flex items-center justify-center rounded-sm font-black">V</span>
             )}
             {player.name.split(' ').pop()}
           </div>
           <div className="bg-white text-slate-900 text-[8px] md:text-xs font-black px-1 md:px-2 py-0.5 md:py-1 w-full text-center">
-            £{player.price}m
+            {player.price}m
           </div>
         </div>
         {player.is_captain && (
-          <div className="absolute -top-1 -left-1 bg-amber-500 text-white text-[6px] md:text-[8px] font-black w-4 h-4 md:w-5 md:h-5 rounded-lg flex items-center justify-center border-2 border-white shadow-lg animate-bounce">C</div>
+          <div className="absolute -top-1 -right-1 bg-amber-500 text-white text-[6px] md:text-[8px] font-black w-4 h-4 md:w-5 md:h-5 rounded-lg flex items-center justify-center border-2 border-white shadow-lg animate-bounce">C</div>
         )}
       </div>
     );
@@ -271,18 +271,18 @@ export function TeamBuilder() {
       {/* Header Info */}
       <div className="flex flex-col lg:flex-row gap-4 md:gap-6 items-stretch">
          <div className="flex-1 flex gap-3 md:gap-4">
-            <div className="fantasy-card flex-1 p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-gradient-to-br from-[var(--card)] to-[var(--muted)] border-l-4 border-indigo-500">
+            <div className="fantasy-card flex-1 p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-gradient-to-br from-[var(--card)] to-[var(--muted)] border-r-4 border-indigo-500">
                <div className="p-2 md:p-3 bg-indigo-500/10 rounded-xl md:rounded-2xl text-indigo-500"><UsersIcon className="w-5 h-5 md:w-6 md:h-6" /></div>
                <div>
-                  <p className="text-[8px] md:text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest">Squad Status</p>
+                  <p className="text-[8px] md:text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-right">حالة التشكيلة</p>
                   <p className="text-lg md:text-2xl font-black">{selectedPlayers.length} <span className="text-[10px] md:text-xs text-[var(--muted-foreground)] font-bold">/ 15</span></p>
                </div>
             </div>
-            <div className="fantasy-card flex-1 p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-gradient-to-br from-[var(--card)] to-[var(--muted)] border-l-4 border-emerald-500">
+            <div className="fantasy-card flex-1 p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-gradient-to-br from-[var(--card)] to-[var(--muted)] border-r-4 border-emerald-500">
                <div className="p-2 md:p-3 bg-emerald-500/10 rounded-xl md:rounded-2xl text-emerald-500"><DollarSign className="w-5 h-5 md:w-6 md:h-6" /></div>
                <div>
-                  <p className="text-[8px] md:text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest">Bank</p>
-                  <p className="text-lg md:text-2xl font-black text-emerald-500">£{budget.toFixed(1)}m</p>
+                  <p className="text-[8px] md:text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-right">الميزانية</p>
+                  <p className="text-lg md:text-2xl font-black text-emerald-500">{budget.toFixed(1)}m</p>
                </div>
             </div>
          </div>
@@ -295,16 +295,16 @@ export function TeamBuilder() {
                   className="fantasy-button bg-[var(--primary)] text-white shadow-lg shadow-[var(--primary)]/30 hover:scale-105 flex-1 md:flex-none md:h-full py-3 md:px-10 flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale transition-all"
                >
                   {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
-                  <span className="font-black uppercase tracking-tighter text-sm">{saving ? 'Saving...' : 'Enter Squad'}</span>
+                  <span className="font-black uppercase tracking-tighter text-sm">{saving ? 'جاري الحفظ...' : 'اعتماد التشكيلة'}</span>
                </button>
             </div>
          )}
          {hasTeam && (
             <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl px-6 py-4 flex items-center gap-4">
                <CheckCircle2 className="w-6 h-6 text-emerald-500" />
-               <div className="text-left">
-                  <p className="text-[8px] font-black text-emerald-500 uppercase tracking-widest leading-none mb-1">Squad Locked</p>
-                  <p className="text-xs font-bold text-emerald-700">Go to Transfers to make changes.</p>
+               <div className="text-right">
+                  <p className="text-[8px] font-black text-emerald-500 uppercase tracking-widest leading-none mb-1">التشكيلة مقفلة</p>
+                  <p className="text-xs font-bold text-emerald-700">اذهب للانتقالات لإجراء التعديلات.</p>
                </div>
             </div>
          )}
@@ -365,21 +365,21 @@ export function TeamBuilder() {
                   <div className="p-6 border-b border-[var(--border)] relative z-10">
                      <div className="flex items-center justify-between mb-6">
                         <div>
-                           <h2 className="text-xl font-black italic uppercase tracking-tighter">Market <span className="text-[var(--primary)]">Explorer</span></h2>
-                           <p className="text-[9px] font-black text-[var(--muted-foreground)] uppercase tracking-widest mt-1">15 players • £100m Budget</p>
+                           <h2 className="text-xl font-black italic uppercase tracking-tighter">سوق <span className="text-[var(--primary)]">اللاعبين</span></h2>
+                           <p className="text-[9px] font-black text-[var(--muted-foreground)] uppercase tracking-widest mt-1">15 لاعب • ميزانية 100m</p>
                         </div>
                         <TrendingUp className="w-5 h-5 text-[var(--primary)] animate-pulse" />
                      </div>
                      
                      <div className="space-y-4">
                         <div className="relative group">
-                           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted-foreground)] group-focus-within:text-[var(--primary)] transition-colors" />
+                           <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted-foreground)] group-focus-within:text-[var(--primary)] transition-colors" />
                            <input 
                               type="text" 
-                              placeholder="Search world-class talent..."
+                              placeholder="ابحث عن نجوم العالم..."
                               value={searchTerm}
                               onChange={(e) => setSearchTerm(e.target.value)}
-                              className="w-full bg-[var(--muted)] border-none rounded-xl pl-12 pr-4 py-4 text-sm font-bold focus:ring-2 focus:ring-[var(--primary)] transition-all placeholder:text-[var(--muted-foreground)]/50"
+                              className="w-full bg-[var(--muted)] border-none rounded-xl pr-12 pl-4 py-4 text-sm font-bold focus:ring-2 focus:ring-[var(--primary)] transition-all placeholder:text-[var(--muted-foreground)]/50"
                            />
                         </div>
                         
@@ -395,7 +395,7 @@ export function TeamBuilder() {
                                       : "bg-[var(--muted)] text-[var(--muted-foreground)] hover:bg-[var(--border)]"
                                  )}
                               >
-                                 {pos}
+                                 {pos === 'ALL' ? 'الكل' : pos === 'GK' ? 'حارس' : pos === 'DEF' ? 'دفاع' : pos === 'MID' ? 'وسط' : 'هجوم'}
                               </button>
                            ))}
                         </div>
@@ -403,14 +403,14 @@ export function TeamBuilder() {
                         {/* Chips Selection */}
                         <div className="pt-4 border-t border-[var(--border)]">
                           <p className="text-[9px] font-black text-[var(--muted-foreground)] uppercase tracking-widest mb-3 flex items-center gap-2">
-                             <TrendingUp className="w-3 h-3 text-[var(--primary)]" /> Tactical Chips
+                             <TrendingUp className="w-3 h-3 text-[var(--primary)]" /> الخواص التكتيكية
                           </p>
                           <div className="grid grid-cols-2 gap-2">
                             {[
-                              { id: 'wildcard', name: 'Wildcard', desc: 'Unlimited' },
-                              { id: 'triple_captain', name: 'Triple Cap', desc: '3x Pts' },
-                              { id: 'bench_boost', name: 'Bench Boost', desc: 'Bench Pts' },
-                              { id: '12th_man', name: '12th Man', desc: '+1 Player' }
+                              { id: 'wildcard', name: 'الوايلد كارد', desc: 'تغييرات لا محدودة' },
+                              { id: 'triple_captain', name: 'الكابتن الثلاثي', desc: '3 أضعاف النقاط' },
+                              { id: 'bench_boost', name: 'تفعيل الدكة', desc: 'نقاط الاحتياط تحسب' },
+                              { id: '12th_man', name: 'اللاعب الـ12', desc: 'لاعب إضافي' }
                             ].map(chip => {
                               const isActive = useTeamStore(state => state.activeChips.includes(chip.id));
                               return (
@@ -418,7 +418,7 @@ export function TeamBuilder() {
                                   key={chip.id}
                                   onClick={() => toggleChip(chip.id)}
                                   className={cn(
-                                    "p-2 rounded-xl border transition-all text-left relative",
+                                    "p-2 rounded-xl border transition-all text-right relative",
                                     isActive 
                                       ? "bg-[var(--primary)] border-[var(--primary)] text-white shadow-md shadow-[var(--primary)]/20" 
                                       : "bg-[var(--muted)] border-transparent text-[var(--foreground)] hover:border-[var(--primary)]/30"
@@ -470,7 +470,7 @@ export function TeamBuilder() {
                                        <Shield className="w-5 h-5 opacity-20" />
                                        <span className="absolute inset-0 flex items-center justify-center text-[8px] font-black">{player.position}</span>
                                     </div>
-                                    <div>
+                                    <div className="text-right">
                                        <h4 className="text-sm font-black text-[var(--foreground)]">{player.name}</h4>
                                        <p className="text-[10px] font-bold text-[var(--muted-foreground)] uppercase tracking-tight">
                                           {clubs[player.club_id]?.name}
@@ -480,7 +480,7 @@ export function TeamBuilder() {
                                  
                                  <div className="flex items-center gap-4">
                                     <span className={cn("text-sm font-black", isBudgetExceeded && !isSelected ? "text-rose-500" : "text-[var(--primary)]")}>
-                                       £{player.price}m
+                                       {player.price}m
                                     </span>
                                     {!hasTeam && (
                                        <button className={cn(
@@ -500,12 +500,12 @@ export function TeamBuilder() {
                   </div>
 
                   <div className="p-6 bg-[var(--muted)]/50 border-t border-[var(--border)] relative z-10">
-                     <div className="flex items-center gap-4 mb-6">
+                     <div className="flex items-center gap-4 mb-6 text-right">
                         <div className="p-3 bg-indigo-500/10 rounded-xl text-indigo-500">
                            <Info className="w-5 h-5" />
                         </div>
                         <p className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest leading-relaxed">
-                           Max 3 players per club. Ensure 15 players are selected to finalize your entry.
+                           الحد الأقصى 3 لاعبين من نفس النادي. تأكد من اختيار 15 لاعباً لاعتماد التشكيلة.
                         </p>
                      </div>
                      
@@ -516,13 +516,13 @@ export function TeamBuilder() {
                      >
                         {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
                         <span className="font-black uppercase tracking-widest text-xs">
-                           {hasTeam ? 'Squad Locked' : selectedPlayers.length < 15 ? `Select ${15 - selectedPlayers.length} More` : 'Enter Arena'}
+                           {hasTeam ? 'التشكيلة مقفلة' : selectedPlayers.length < 15 ? `اختر ${15 - selectedPlayers.length} لاعبين إضافيين` : 'دخول الساحة'}
                         </span>
-                     </button>
-                  </div>
-               </div>
-            </div>
-        )}
+                      </button>
+                   </div>
+                </div>
+             </div>
+         )}
       </div>
 
       <AlertModal 
@@ -531,7 +531,7 @@ export function TeamBuilder() {
         type={alertState.type} 
         title={alertState.title} 
         message={alertState.message} 
-      />
+      />    />
 
       <PlayerPickerModal
         isOpen={pickerState.isOpen}

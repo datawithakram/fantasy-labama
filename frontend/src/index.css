@@ -36,7 +36,7 @@
 @layer base {
   body {
     @apply bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Cairo', sans-serif;
   }
 }
 

@@ -56,8 +56,8 @@ function App() {
                   <Zap className="w-6 h-6 text-white fill-white" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-black italic tracking-tighter uppercase leading-none">Labama <span className="text-white/60">Fantasy</span></h1>
-                  <p className="text-[10px] font-bold uppercase tracking-widest opacity-60">Gameweek 12 • Active</p>
+                  <h1 className="text-xl font-black italic tracking-tighter uppercase leading-none">لابطاما <span className="text-white/60">فانتزي</span></h1>
+                  <p className="text-[10px] font-bold uppercase tracking-widest opacity-60">الجولة 12 • نشط</p>
                 </div>
               </div>
 
@@ -68,9 +68,9 @@ function App() {
                 >
                   {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
                 </button>
-                <NavLink to="/profile" className="flex items-center gap-3 bg-white/10 pl-4 pr-2 py-1 rounded-full border border-white/10 hover:bg-white/20 transition-all group">
+                <NavLink to="/profile" className="flex items-center gap-3 bg-white/10 pr-4 pl-2 py-1 rounded-full border border-white/10 hover:bg-white/20 transition-all group">
                    <div className="text-right hidden sm:block">
-                     <p className="text-[10px] font-bold opacity-60 uppercase tracking-tighter">My Team</p>
+                     <p className="text-[10px] font-bold opacity-60 uppercase tracking-tighter">فريقي</p>
                      <p className="text-xs font-black truncate max-w-[80px]">{(session.user.email as string).split('@')[0]}</p>
                    </div>
                    <div className="w-8 h-8 rounded-full bg-indigo-500 border-2 border-white flex items-center justify-center overflow-hidden shadow-md">
@@ -84,19 +84,19 @@ function App() {
             <nav className="hidden md:block bg-[var(--card)] border-b border-[var(--border)] sticky top-0 z-40 backdrop-blur-md bg-opacity-80">
               <div className="max-w-6xl mx-auto px-4 flex overflow-x-auto no-scrollbar">
                 <NavLink to="/" className={({isActive}) => `nav-link h-16 shrink-0 ${isActive ? 'nav-link-active !bg-transparent border-b-4 border-[var(--primary)] rounded-none' : ''}`}>
-                  <Layout className="w-5 h-5" /> <span>My Team</span>
+                  <Layout className="w-5 h-5" /> <span>فريقي</span>
                 </NavLink>
                 <NavLink to="/transfers" className={({isActive}) => `nav-link h-16 shrink-0 ${isActive ? 'nav-link-active !bg-transparent border-b-4 border-[var(--primary)] rounded-none' : ''}`}>
-                  <Repeat className="w-5 h-5" /> <span>Transfers</span>
+                  <Repeat className="w-5 h-5" /> <span>الانتقالات</span>
                 </NavLink>
                 <NavLink to="/matches" className={({isActive}) => `nav-item h-16 shrink-0 nav-link ${isActive ? 'nav-link-active !bg-transparent border-b-4 border-[var(--primary)] rounded-none' : ''}`}>
-                  <BarChart2 className="w-5 h-5" /> <span>Match Center</span>
+                  <BarChart2 className="w-5 h-5" /> <span>مركز المباريات</span>
                 </NavLink>
                 <NavLink to="/leagues" className={({isActive}) => `nav-link h-16 shrink-0 ${isActive ? 'nav-link-active !bg-transparent border-b-4 border-[var(--primary)] rounded-none' : ''}`}>
-                  <Trophy className="w-5 h-5" /> <span>Leagues</span>
+                  <Trophy className="w-5 h-5" /> <span>البطولات</span>
                 </NavLink>
                 <NavLink to="/history" className={({isActive}) => `nav-link h-16 shrink-0 ${isActive ? 'nav-link-active !bg-transparent border-b-4 border-[var(--primary)] rounded-none' : ''}`}>
-                   <Users className="w-5 h-5" /> <span>History</span>
+                   <Users className="w-5 h-5" /> <span>السجل</span>
                 </NavLink>
               </div>
             </nav>
@@ -122,36 +122,36 @@ function App() {
             <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--card)]/80 backdrop-blur-xl border-t border-[var(--border)] px-2 py-3 z-50 flex justify-around items-center pb-safe">
               <NavLink to="/" className={({isActive}) => `flex flex-col items-center gap-1 transition-all ${isActive ? 'text-[var(--primary)]' : 'text-[var(--muted-foreground)]'}`}>
                 <Layout className="w-5 h-5" />
-                <span className="text-[10px] font-black uppercase tracking-tighter">Team</span>
+                <span className="text-[10px] font-black uppercase tracking-tighter">فريقي</span>
               </NavLink>
               <NavLink to="/transfers" className={({isActive}) => `flex flex-col items-center gap-1 transition-all ${isActive ? 'text-[var(--primary)]' : 'text-[var(--muted-foreground)]'}`}>
                 <Repeat className="w-5 h-5" />
-                <span className="text-[10px] font-black uppercase tracking-tighter">Transfers</span>
+                <span className="text-[10px] font-black uppercase tracking-tighter">انتقالات</span>
               </NavLink>
               <NavLink to="/matches" className={({isActive}) => `flex flex-col items-center gap-1 transition-all ${isActive ? 'text-[var(--primary)]' : 'text-[var(--muted-foreground)]'}`}>
                 <BarChart2 className="w-5 h-5" />
-                <span className="text-[10px] font-black uppercase tracking-tighter">Matches</span>
+                <span className="text-[10px] font-black uppercase tracking-tighter">مباريات</span>
               </NavLink>
               <NavLink to="/leagues" className={({isActive}) => `flex flex-col items-center gap-1 transition-all ${isActive ? 'text-[var(--primary)]' : 'text-[var(--muted-foreground)]'}`}>
                 <Trophy className="w-5 h-5" />
-                <span className="text-[10px] font-black uppercase tracking-tighter">Leagues</span>
+                <span className="text-[10px] font-black uppercase tracking-tighter">بطولات</span>
               </NavLink>
               <NavLink to="/profile" className={({isActive}) => `flex flex-col items-center gap-1 transition-all ${isActive ? 'text-[var(--primary)]' : 'text-[var(--muted-foreground)]'}`}>
                 <User className="w-5 h-5" />
-                <span className="text-[10px] font-black uppercase tracking-tighter">Profile</span>
+                <span className="text-[10px] font-black uppercase tracking-tighter">الملف</span>
               </NavLink>
             </nav>
 
             <footer className="hidden md:block bg-[var(--card)] border-t border-[var(--border)] py-10 mt-20">
               <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10 opacity-60">
                 <div>
-                   <h3 className="font-black italic uppercase tracking-tighter text-lg mb-4">Labama <span className="text-[var(--primary)]">Fantasy</span></h3>
-                   <p className="text-xs leading-relaxed">The ultimate fantasy football experience. Compete with friends and win prizes in the most realistic league management game.</p>
+                   <h3 className="font-black italic uppercase tracking-tighter text-lg mb-4">لابطاما <span className="text-[var(--primary)]">فانتزي</span></h3>
+                   <p className="text-xs leading-relaxed">تجربة فانتزي كرة القدم النهائية. تنافس مع أصدقائك واربح جوائز في أكثر ألعاب إدارة الدوريات واقعية.</p>
                 </div>
-                <div className="flex flex-col gap-2 text-xs font-bold uppercase tracking-widest">
-                  <p>Terms of Service</p>
-                  <p>Privacy Policy</p>
-                  <p>Cookie Settings</p>
+                <div className="flex flex-col gap-2 text-xs font-bold uppercase tracking-widest text-right">
+                  <p>شروط الخدمة</p>
+                  <p>سياسة الخصوصية</p>
+                  <p>إعدادات الكوكيز</p>
                 </div>
                 <div className="text-right flex flex-col justify-between">
                    <div className="flex justify-end gap-4">
@@ -159,7 +159,7 @@ function App() {
                       <div className="w-8 h-8 bg-[var(--muted)] rounded-lg"></div>
                       <div className="w-8 h-8 bg-[var(--muted)] rounded-lg"></div>
                    </div>
-                   <p className="text-[10px] mt-6">© 2026 Labama Sports Engine. All Rights Reserved.</p>
+                   <p className="text-[10px] mt-6">© 2026 محرك لابطاما الرياضي. جميع الحقوق محفوظة.</p>
                 </div>
               </div>
             </footer>

@@ -38,8 +38,8 @@ const LoginPage = () => {
           <div className="inline-flex w-16 h-16 bg-indigo-600 rounded-2xl items-center justify-center shadow-[0_0_30px_rgba(99,102,241,0.4)] mb-6">
             <Trophy className="text-white w-8 h-8" />
           </div>
-          <h1 className="text-3xl font-black text-white italic uppercase tracking-tighter">Labama <span className="text-indigo-400">HQ</span></h1>
-          <p className="text-slate-500 text-xs font-bold uppercase tracking-[0.2em] mt-2">Secure Admin Access</p>
+          <h1 className="text-3xl font-black text-white italic uppercase tracking-tighter">لابطاما <span className="text-indigo-400">HQ</span></h1>
+          <p className="text-slate-500 text-xs font-bold uppercase tracking-[0.2em] mt-2">دخول آمن للمشرفين</p>
         </div>
 
         <div className="glass-panel p-8 rounded-3xl border border-white/5 relative z-10">
@@ -51,14 +51,14 @@ const LoginPage = () => {
             )}
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Admin Email</label>
+              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mr-1">البريد الإلكتروني للمدير</label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                <Mail className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                 <input 
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-slate-900/50 border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-white"
+                  className="w-full bg-slate-900/50 border border-white/10 rounded-2xl pr-12 pl-4 py-4 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-white"
                   placeholder="admin@labama.com"
                   required
                 />
@@ -66,14 +66,14 @@ const LoginPage = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Secret Key</label>
+              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mr-1">المفتاح السري</label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                <Lock className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                 <input 
                   type="password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-slate-900/50 border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-white"
+                  className="w-full bg-slate-900/50 border border-white/10 rounded-2xl pr-12 pl-4 py-4 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-white"
                   placeholder="••••••••"
                   required
                 />
@@ -89,8 +89,8 @@ const LoginPage = () => {
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <>
-                  Enter Control Center 
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  دخول مركز التحكم 
+                  <ArrowRight className="w-4 h-4 group-hover:-translate-x-1 transition-transform rotate-180" />
                 </>
               )}
             </button>
@@ -98,7 +98,7 @@ const LoginPage = () => {
         </div>
 
         <p className="text-center mt-8 text-[10px] text-slate-600 font-bold uppercase tracking-widest">
-          Access restricted to authorized personnel only.
+          الدخول مقتصر على الموظفين المصرح لهم فقط.
         </p>
       </div>
     </div>

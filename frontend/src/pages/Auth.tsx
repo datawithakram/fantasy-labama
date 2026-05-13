@@ -56,17 +56,17 @@ export default function Auth() {
               <Mail className="w-10 h-10 text-emerald-500 animate-bounce" />
            </div>
            <div>
-              <h2 className="text-2xl font-black italic uppercase tracking-tighter text-[var(--foreground)]">Check your inbox</h2>
+              <h2 className="text-2xl font-black italic uppercase tracking-tighter text-[var(--foreground)]">تحقق من بريدك الإلكتروني</h2>
               <p className="text-[var(--muted-foreground)] font-bold text-sm mt-3 leading-relaxed">
-                We've sent a verification link to <span className="text-[var(--primary)]">{email}</span>. 
-                Please verify your account to start building your squad.
+                لقد أرسلنا رابط التحقق إلى <span className="text-[var(--primary)]">{email}</span>. 
+                يرجى التحقق من حسابك لتبدأ في بناء تشكيلتك.
               </p>
            </div>
            <button 
              onClick={() => setSuccess(false)}
              className="w-full py-4 bg-[var(--primary)] text-white rounded-xl font-black uppercase tracking-widest text-xs shadow-lg shadow-[var(--primary)]/20 hover:scale-105 transition-all"
            >
-             Back to Login
+             العودة لتسجيل الدخول
            </button>
         </div>
       </div>
@@ -81,8 +81,8 @@ export default function Auth() {
            <div className="bg-white/10 backdrop-blur-md p-6 rounded-[2.5rem] inline-block mb-8 shadow-2xl border border-white/10">
               <Trophy className="h-20 w-20 text-[var(--primary)]" />
            </div>
-           <h1 className="text-6xl font-black uppercase italic tracking-tighter mb-4 leading-none text-white">Fantasy <span className="text-[var(--primary)]">Labama</span></h1>
-           <p className="text-2xl text-white/40 font-bold uppercase tracking-[0.3em] italic">The Game is On</p>
+           <h1 className="text-6xl font-black uppercase italic tracking-tighter mb-4 leading-none text-white">فانتزي <span className="text-[var(--primary)]">لابطاما</span></h1>
+           <p className="text-2xl text-white/40 font-bold uppercase tracking-[0.3em] italic">اللعبة قد بدأت</p>
         </div>
         
         {/* Animated Background shapes */}
@@ -93,11 +93,11 @@ export default function Auth() {
       {/* Form Column */}
       <div className="md:w-1/2 flex items-center justify-center p-8 bg-[var(--card)]">
         <div className="max-w-md w-full">
-          <div className="mb-10 text-center md:text-left">
+          <div className="mb-10 text-center md:text-right">
             <h2 className="text-4xl font-black text-[var(--foreground)] uppercase italic tracking-tight mb-3">
-              {!isSignUp ? 'Welcome <span className="text-[var(--primary)]">Back</span>' : 'Join the <span className="text-[var(--primary)]">Arena</span>'}
+              {!isSignUp ? 'مرحباً بك <span className="text-[var(--primary)]">مجدداً</span>' : 'انضم إلى <span className="text-[var(--primary)]">الساحة</span>'}
             </h2>
-            <p className="text-[var(--muted-foreground)] font-bold text-sm">Experience the most advanced fantasy manager on the market.</p>
+            <p className="text-[var(--muted-foreground)] font-bold text-sm">عش تجربة فانتزي كرة القدم الأكثر تقدماً في السوق.</p>
           </div>
 
           {error && (
@@ -110,28 +110,28 @@ export default function Auth() {
           <form onSubmit={handleAuth} className="space-y-6">
             <div className="space-y-5">
               <div className="group">
-                <label className="block text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-[0.2em] mb-2 px-1 group-focus-within:text-[var(--primary)] transition-colors">Email Address</label>
+                <label className="block text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-[0.2em] mb-2 px-1 group-focus-within:text-[var(--primary)] transition-colors">البريد الإلكتروني</label>
                 <div className="relative">
-                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted-foreground)] group-focus-within:text-[var(--primary)] transition-colors" />
+                   <Mail className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted-foreground)] group-focus-within:text-[var(--primary)] transition-colors" />
                    <input
                      type="email"
                      value={email}
                      onChange={(e) => setEmail(e.target.value)}
-                     className="w-full bg-[var(--muted)] border-none rounded-2xl pl-12 pr-4 py-4 text-[var(--foreground)] font-bold placeholder-[var(--muted-foreground)]/50 focus:ring-2 focus:ring-[var(--primary)] transition-all"
-                     placeholder="e.g. manager@labama.com"
+                     className="w-full bg-[var(--muted)] border-none rounded-2xl pr-12 pl-4 py-4 text-[var(--foreground)] font-bold placeholder-[var(--muted-foreground)]/50 focus:ring-2 focus:ring-[var(--primary)] transition-all"
+                     placeholder="مثال: manager@labama.com"
                      required
                    />
                 </div>
               </div>
               <div className="group">
-                <label className="block text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-[0.2em] mb-2 px-1 group-focus-within:text-[var(--primary)] transition-colors">Security Key</label>
+                <label className="block text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-[0.2em] mb-2 px-1 group-focus-within:text-[var(--primary)] transition-colors">كلمة السر</label>
                 <div className="relative">
-                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted-foreground)] group-focus-within:text-[var(--primary)] transition-colors" />
+                   <Lock className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted-foreground)] group-focus-within:text-[var(--primary)] transition-colors" />
                    <input
                      type="password"
                      value={password}
                      onChange={(e) => setPassword(e.target.value)}
-                     className="w-full bg-[var(--muted)] border-none rounded-2xl pl-12 pr-4 py-4 text-[var(--foreground)] font-bold placeholder-[var(--muted-foreground)]/50 focus:ring-2 focus:ring-[var(--primary)] transition-all"
+                     className="w-full bg-[var(--muted)] border-none rounded-2xl pr-12 pl-4 py-4 text-[var(--foreground)] font-bold placeholder-[var(--muted-foreground)]/50 focus:ring-2 focus:ring-[var(--primary)] transition-all"
                      placeholder="••••••••"
                      required
                    />
@@ -147,15 +147,15 @@ export default function Auth() {
               {loading ? (
                  <div className="flex items-center gap-2">
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    <span>Processing...</span>
+                    <span>جاري المعالجة...</span>
                  </div>
-              ) : (!isSignUp ? <><LogIn className="h-5 w-5" /> Access Arena</> : <><UserPlus className="h-5 w-5" /> Create Identity</>)}
+              ) : (!isSignUp ? <><LogIn className="h-5 w-5" /> دخول الساحة</> : <><UserPlus className="h-5 w-5" /> إنشاء هوية</>)}
             </button>
           </form>
 
           <div className="mt-12 text-center pt-10 border-t border-[var(--border)]">
             <p className="text-[var(--muted-foreground)] font-bold text-sm mb-5">
-              {!isSignUp ? "Don't have an identity yet?" : "Already an arena member?"}
+              {!isSignUp ? "ليس لديك هوية بعد؟" : "هل أنت عضو بالفعل؟"}
             </p>
             <button
               onClick={() => {
@@ -164,7 +164,7 @@ export default function Auth() {
               }}
               className="text-[var(--primary)] hover:text-[var(--foreground)] font-black uppercase tracking-[0.2em] text-[10px] transition-all border-b-2 border-[var(--primary)]/20 hover:border-[var(--primary)] pb-1"
             >
-              {!isSignUp ? 'Establish New Account' : 'Return to Login'}
+              {!isSignUp ? 'إنشاء حساب جديد' : 'العودة لتسجيل الدخول'}
             </button>
           </div>
         </div>

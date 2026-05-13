@@ -63,8 +63,8 @@ function App() {
                  <Trophy className="text-white w-6 h-6" />
               </div>
               <div>
-                <h1 className="text-xl font-black tracking-tight text-white uppercase italic">Labama <span className="text-indigo-400">HQ</span></h1>
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Admin Center</p>
+                <h1 className="text-xl font-black tracking-tight text-white uppercase italic">لابطاما <span className="text-indigo-400">HQ</span></h1>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">مركز الإدارة</p>
               </div>
             </div>
             <button className="lg:hidden p-2 text-slate-400" onClick={() => setIsSidebarOpen(false)}>
@@ -73,32 +73,32 @@ function App() {
           </div>
 
           <div className="flex-1 space-y-1 overflow-y-auto custom-scrollbar">
-            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 px-2">Main Menu</p>
+            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 px-2">القائمة الرئيسية</p>
             <NavLink to="/" onClick={() => setIsSidebarOpen(false)} className={({isActive}) => `nav-item ${isActive ? 'nav-item-active' : ''}`}>
-              <Home className="w-5 h-5" /> <span>Dashboard</span>
+              <Home className="w-5 h-5" /> <span>الرئيسية</span>
             </NavLink>
             <NavLink to="/control" onClick={() => setIsSidebarOpen(false)} className={({isActive}) => `nav-item ${isActive ? 'nav-item-active' : ''}`}>
-              <Settings className="w-5 h-5" /> <span>Game Control</span>
+              <Settings className="w-5 h-5" /> <span>التحكم باللعبة</span>
             </NavLink>
             <NavLink to="/leagues" onClick={() => setIsSidebarOpen(false)} className={({isActive}) => `nav-item ${isActive ? 'nav-item-active' : ''}`}>
-              <Trophy className="w-5 h-5" /> <span>Leagues</span>
+              <Trophy className="w-5 h-5" /> <span>البطولات</span>
             </NavLink>
             
-            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mt-8 mb-4 px-2">Data Management</p>
+            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mt-8 mb-4 px-2">إدارة البيانات</p>
             <NavLink to="/clubs" onClick={() => setIsSidebarOpen(false)} className={({isActive}) => `nav-item ${isActive ? 'nav-item-active' : ''}`}>
-              <Shield className="w-5 h-5" /> <span>Clubs</span>
+              <Shield className="w-5 h-5" /> <span>الأندية</span>
             </NavLink>
             <NavLink to="/players" onClick={() => setIsSidebarOpen(false)} className={({isActive}) => `nav-item ${isActive ? 'nav-item-active' : ''}`}>
-              <Users className="w-5 h-5" /> <span>Players</span>
+              <Users className="w-5 h-5" /> <span>اللاعبين</span>
             </NavLink>
             <NavLink to="/matches" onClick={() => setIsSidebarOpen(false)} className={({isActive}) => `nav-item ${isActive ? 'nav-item-active' : ''}`}>
-              <Calendar className="w-5 h-5" /> <span>Matches</span>
+              <Calendar className="w-5 h-5" /> <span>المباريات</span>
             </NavLink>
             <NavLink to="/events" onClick={() => setIsSidebarOpen(false)} className={({isActive}) => `nav-item ${isActive ? 'nav-item-active' : ''}`}>
-              <Activity className="w-5 h-5" /> <span>Match Events</span>
+              <Activity className="w-5 h-5" /> <span>أحداث المباريات</span>
             </NavLink>
             <NavLink to="/groups" onClick={() => setIsSidebarOpen(false)} className={({isActive}) => `nav-item ${isActive ? 'nav-item-active' : ''}`}>
-              <LayoutGrid className="w-5 h-5" /> <span>Groups</span>
+              <LayoutGrid className="w-5 h-5" /> <span>المجموعات</span>
             </NavLink>
           </div>
 
@@ -107,7 +107,7 @@ function App() {
               onClick={handleLogout}
               className="nav-item w-full text-red-400 hover:bg-red-500/10 hover:text-red-300"
             >
-              <LogOut className="w-5 h-5" /> <span>Sign Out</span>
+              <LogOut className="w-5 h-5" /> <span>تسجيل الخروج</span>
             </button>
           </div>
         </aside>
@@ -125,7 +125,7 @@ function App() {
               </button>
               <div className="hidden md:flex items-center gap-4 bg-slate-900/50 px-4 py-2 rounded-xl border border-white/5 w-64 lg:w-96">
                 <Search className="w-4 h-4 text-slate-500" />
-                <input type="text" placeholder="Global Search..." className="bg-transparent border-none focus:ring-0 text-sm w-full outline-none" />
+                <input type="text" placeholder="بحث شامل..." className="bg-transparent border-none focus:ring-0 text-sm w-full outline-none" />
               </div>
             </div>
             
@@ -134,9 +134,9 @@ function App() {
                 <Bell className="w-5 h-5" />
                 <span className="absolute -top-1 -right-1 w-2 h-2 bg-indigo-500 rounded-full border-2 border-[#0f172a]"></span>
               </button>
-              <div className="flex items-center gap-3 pl-4 lg:pl-6 border-l border-white/5">
-                <div className="hidden sm:block text-right">
-                  <p className="text-sm font-bold">Admin User</p>
+              <div className="flex items-center gap-3 pr-4 lg:pr-6 border-r border-white/5">
+                <div className="hidden sm:block text-left">
+                  <p className="text-sm font-bold">مدير النظام</p>
                   <p className="text-[10px] text-indigo-400 font-bold uppercase">Super Admin</p>
                 </div>
                 <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shrink-0"></div>
