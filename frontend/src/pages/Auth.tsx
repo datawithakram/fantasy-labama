@@ -81,7 +81,7 @@ export default function Auth() {
            <div className="bg-white/10 backdrop-blur-md p-6 rounded-[2.5rem] inline-block mb-8 shadow-2xl border border-white/10">
               <Trophy className="h-20 w-20 text-[var(--primary)]" />
            </div>
-           <h1 className="text-6xl font-black uppercase italic tracking-tighter mb-4 leading-none text-white">فانتزي <span className="text-[var(--primary)]">لابطاما</span></h1>
+           <h1 className="text-6xl font-black uppercase italic tracking-tighter mb-4 leading-none text-white">فانتزي <span className="text-[var(--primary)]">لبامة</span></h1>
            <p className="text-2xl text-white/40 font-bold uppercase tracking-[0.3em] italic">اللعبة قد بدأت</p>
         </div>
         
@@ -95,7 +95,11 @@ export default function Auth() {
         <div className="max-w-md w-full">
           <div className="mb-10 text-center md:text-right">
             <h2 className="text-4xl font-black text-[var(--foreground)] uppercase italic tracking-tight mb-3">
-              {!isSignUp ? 'مرحباً بك <span className="text-[var(--primary)]">مجدداً</span>' : 'انضم إلى <span className="text-[var(--primary)]">الساحة</span>'}
+              {!isSignUp ? (
+                <>مرحباً بك <span className="text-[var(--primary)]">مجدداً</span></>
+              ) : (
+                <>انضم إلى <span className="text-[var(--primary)]">الساحة</span></>
+              )}
             </h2>
             <p className="text-[var(--muted-foreground)] font-bold text-sm">عش تجربة فانتزي كرة القدم الأكثر تقدماً في السوق.</p>
           </div>

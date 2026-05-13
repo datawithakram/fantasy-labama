@@ -24,7 +24,7 @@ const Dashboard = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-4xl font-black text-white tracking-tight">نظرة عامة على <span className="text-indigo-500">النظام</span></h1>
-          <p className="text-slate-400 mt-2 font-medium">مرحباً بك مجدداً أيها المدير. إليك ما يحدث في فانتزي لابطاما اليوم.</p>
+          <p className="text-slate-400 mt-2 font-medium">مرحباً بك مجدداً أيها المدير. إليك ما يحدث في فانتزي لبامة اليوم.</p>
         </div>
         <button className="glow-button">
           توليد تقرير الجولة
@@ -84,12 +84,10 @@ const Dashboard = () => {
 
       {/* Footer Branding */}
       <div className="pt-10 flex justify-center opacity-20 grayscale transition-all hover:grayscale-0 hover:opacity-100">
-         <p className="text-xs font-black text-slate-500 uppercase tracking-[0.5em]">بدعم من محرك لابطاما الأساسي v2.4.0</p>
+         <p className="text-xs font-black text-slate-500 uppercase tracking-[0.5em]">بدعم من محرك لبامة الأساسي v2.4.0</p>
       </div>
     </div>
   );
 };
 
 export default Dashboard;
-
-

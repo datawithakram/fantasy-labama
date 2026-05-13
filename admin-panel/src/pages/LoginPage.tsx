@@ -38,7 +38,7 @@ const LoginPage = () => {
           <div className="inline-flex w-16 h-16 bg-indigo-600 rounded-2xl items-center justify-center shadow-[0_0_30px_rgba(99,102,241,0.4)] mb-6">
             <Trophy className="text-white w-8 h-8" />
           </div>
-          <h1 className="text-3xl font-black text-white italic uppercase tracking-tighter">لابطاما <span className="text-indigo-400">HQ</span></h1>
+          <h1 className="text-3xl font-black text-white italic uppercase tracking-tighter">لبامة <span className="text-indigo-400">HQ</span></h1>
           <p className="text-slate-500 text-xs font-bold uppercase tracking-[0.2em] mt-2">دخول آمن للمشرفين</p>
         </div>
 

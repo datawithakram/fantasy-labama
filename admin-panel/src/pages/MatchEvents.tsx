@@ -110,7 +110,7 @@ const MatchEvents = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this event?')) return;
+    if (!confirm('هل أنت متأكد من حذف هذا الحدث؟')) return;
     const { error } = await supabase.from('match_events').delete().eq('id', id);
     if (error) console.error('Error deleting event:', error);
     else fetchEvents();
@@ -136,22 +136,22 @@ const MatchEvents = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <h2 className="text-2xl font-bold flex items-center gap-2">
-        <Activity className="text-indigo-500" /> Manage Match Events
+    <div className="p-6 space-y-6 text-right">
+      <h2 className="text-2xl font-bold flex flex-row-reverse items-center gap-2">
+        <Activity className="text-indigo-500" /> إدارة أحداث المباريات
       </h2>
       
       {/* Match Selector */}
-      <div className="bg-slate-800 rounded-lg border border-slate-700 p-6">
-        <label className="block text-sm font-medium mb-2 text-indigo-300">Select Active Match to Log Events</label>
+      <div className="bg-slate-800 rounded-lg border border-slate-700 p-6 text-right">
+        <label className="block text-sm font-medium mb-2 text-indigo-300 text-right">اختر المباراة النشطة لتسجيل الأحداث</label>
         <select 
           value={matchId} 
           onChange={(e) => setMatchId(parseInt(e.target.value))}
-          className="w-full max-w-xl bg-slate-900 border border-slate-700 rounded p-3 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-bold shadow-sm"
+          className="w-full max-w-xl bg-slate-900 border border-slate-700 rounded p-3 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-bold shadow-sm text-right"
         >
           {matches.map(match => (
             <option key={match.id} value={match.id}>
-              {clubs.find(c => c.id === match.home_club)?.name} vs {clubs.find(c => c.id === match.away_club)?.name}
+              {clubs.find(c => c.id === match.home_club)?.name} ضد {clubs.find(c => c.id === match.away_club)?.name}
             </option>
           ))}
         </select>
@@ -159,76 +159,76 @@ const MatchEvents = () => {
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* Form Card */}
-        <div className="bg-slate-800 rounded-lg border border-slate-700 p-6 h-fit">
-          <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+        <div className="bg-slate-800 rounded-lg border border-slate-700 p-6 h-fit text-right">
+          <h3 className="font-bold text-lg mb-4 flex flex-row-reverse items-center gap-2">
             {editingId ? <Edit2 className="w-5 h-5 text-indigo-400" /> : <Plus className="w-5 h-5 text-indigo-400" />}
-            {editingId ? 'Edit Event' : 'Log New Event'}
+            {editingId ? 'تعديل الحدث' : 'تسجيل حدث جديد'}
           </h3>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Event Type</label>
+              <label className="block text-sm font-medium mb-1 text-right">نوع الحدث</label>
               <select 
                 value={eventType} 
                 onChange={(e) => setEventType(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 rounded p-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                className="w-full bg-slate-900 border border-slate-700 rounded p-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm text-right"
               >
-                <option value="goal">Goal ⚽</option>
-                <option value="assist">Assist 👟</option>
-                <option value="penalty">Penalty 🎯</option>
-                <option value="own_goal">Own Goal 🤦‍♂️</option>
-                <option value="save">Save 🧤</option>
-                <option value="penalty_save">Penalty Save 🧤🔥</option>
-                <option value="penalty_miss">Penalty Miss ❌</option>
-                <option value="minutes">Minutes Played ⏱️</option>
-                <option value="yellow">Yellow Card 🟨</option>
-                <option value="red">Red Card 🟥</option>
+                <option value="goal">هدف ⚽</option>
+                <option value="assist">تمريرة حاسمة 👟</option>
+                <option value="penalty">ركلة جزاء 🎯</option>
+                <option value="own_goal">هدف عكسي 🤦‍♂️</option>
+                <option value="save">تصدّي 🧤</option>
+                <option value="penalty_save">تصدّي لركلة جزاء 🧤🔥</option>
+                <option value="penalty_miss">إهدار ركلة جزاء ❌</option>
+                <option value="minutes">دقائق اللعب ⏱️</option>
+                <option value="yellow">بطاقة صفراء 🟨</option>
+                <option value="red">بطاقة حمراء 🟥</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Player</label>
+              <label className="block text-sm font-medium mb-1 text-right">اللاعب</label>
               <select 
                 value={playerId} 
                 onChange={(e) => setPlayerId(parseInt(e.target.value))}
-                className="w-full bg-slate-900 border border-slate-700 rounded p-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                className="w-full bg-slate-900 border border-slate-700 rounded p-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm text-right"
               >
-                <option value={0}>Select Player...</option>
+                <option value={0}>اختر اللاعب...</option>
                 {filteredPlayers.map(player => (
                   <option key={player.id} value={player.id}>{player.name} ({clubs.find(c => c.id === player.club_id)?.name})</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Minute</label>
+              <label className="block text-sm font-medium mb-1 text-right">الدقيقة</label>
               <div className="relative">
                 <input 
                   type="number" 
                   value={minute} 
                   onChange={(e) => setMinute(parseInt(e.target.value))}
-                  className="w-full bg-slate-900 border border-slate-700 rounded p-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm pl-4 pr-10"
+                  className="w-full bg-slate-900 border border-slate-700 rounded p-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm pr-4 pl-10 text-right"
                   required
                 />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold">'</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold">'</span>
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Related Player (Optional, e.g. Assister)</label>
+              <label className="block text-sm font-medium mb-1 text-right">اللاعب ذو الصلة (اختياري، مثل صانع الهدف)</label>
               <select 
                 value={relatedPlayerId || 0} 
                 onChange={(e) => setRelatedPlayerId(parseInt(e.target.value) || undefined)}
-                className="w-full bg-slate-900 border border-slate-700 rounded p-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                className="w-full bg-slate-900 border border-slate-700 rounded p-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm text-right"
               >
-                <option value={0}>None</option>
+                <option value={0}>لا يوجد</option>
                 {filteredPlayers.map(player => (
                   <option key={player.id} value={player.id}>{player.name}</option>
                 ))}
               </select>
             </div>
-            <div className="pt-4 flex gap-2">
+            <div className="pt-4 flex flex-row-reverse gap-2">
               <button 
                 type="submit"
-                className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition-colors flex items-center justify-center gap-2 text-sm"
+                className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition-colors flex flex-row-reverse items-center justify-center gap-2 text-sm"
               >
-                <Save className="w-4 h-4" /> {editingId ? 'Update Event' : 'Log Event'}
+                 {editingId ? 'تحديث الحدث' : 'تسجيل الحدث'} <Save className="w-4 h-4" />
               </button>
               {editingId && (
                 <button 
@@ -236,7 +236,7 @@ const MatchEvents = () => {
                   onClick={() => { setEditingId(null); resetForm(); }}
                   className="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded transition-colors text-sm"
                 >
-                  Cancel
+                  إلغاء
                 </button>
               )}
             </div>
@@ -244,35 +244,35 @@ const MatchEvents = () => {
         </div>
 
         {/* Timeline List Card */}
-        <div className="xl:col-span-2 bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
-          <div className="p-4 border-b border-slate-700 bg-slate-800 flex justify-between items-center">
-            <h3 className="font-bold flex items-center gap-2"><PlaySquare className="w-4 h-4 text-indigo-400" /> Match Timeline</h3>
-            <span className="text-xs font-bold text-slate-400 bg-slate-900 px-2 py-1 rounded">{events.length} Events</span>
+        <div className="xl:col-span-2 bg-slate-800 rounded-lg border border-slate-700 overflow-hidden text-right">
+          <div className="p-4 border-b border-slate-700 bg-slate-800 flex flex-row-reverse justify-between items-center">
+            <h3 className="font-bold flex flex-row-reverse items-center gap-2"><PlaySquare className="w-4 h-4 text-indigo-400" /> الجدول الزمني للمباراة</h3>
+            <span className="text-xs font-bold text-slate-400 bg-slate-900 px-2 py-1 rounded">{events.length} أحداث</span>
           </div>
           <div className="overflow-x-auto max-h-[600px] custom-scrollbar">
-            <table className="w-full text-left text-sm">
+            <table className="w-full text-right text-sm">
               <thead className="bg-slate-900/50 text-slate-400 uppercase text-xs sticky top-0 z-10 backdrop-blur-sm">
                 <tr>
-                  <th className="p-4 font-semibold w-16 text-center">Min</th>
-                  <th className="p-4 font-semibold">Event</th>
-                  <th className="p-4 font-semibold">Player</th>
-                  <th className="p-4 font-semibold">Related</th>
-                  <th className="p-4 font-semibold text-right">Actions</th>
+                  <th className="p-4 font-semibold w-16 text-center">الدقيقة</th>
+                  <th className="p-4 font-semibold text-right">الحدث</th>
+                  <th className="p-4 font-semibold text-right">اللاعب</th>
+                  <th className="p-4 font-semibold text-right">ذو صلة</th>
+                  <th className="p-4 font-semibold text-left">الإجراءات</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-700">
                 {events.map((event) => (
                   <tr key={event.id} className="hover:bg-slate-700/50 transition-colors">
                     <td className="p-4 font-black text-indigo-300 text-center">{event.minute}'</td>
-                    <td className="p-4">
+                    <td className="p-4 text-right">
                       <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase ${getEventStyle(event.event_type)}`}>
-                        {event.event_type.replace('_', ' ')}
+                        {event.event_type === 'goal' ? 'هدف' : event.event_type === 'assist' ? 'صناعة' : event.event_type === 'penalty' ? 'جزاء' : event.event_type === 'own_goal' ? 'هدف عكسي' : event.event_type === 'yellow' ? 'بطاقة صفراء' : event.event_type === 'red' ? 'بطاقة حمراء' : event.event_type.replace('_', ' ')}
                       </span>
                     </td>
-                    <td className="p-4 font-medium text-white">{players.find(p => p.id === event.player_id)?.name}</td>
-                    <td className="p-4 text-slate-400">{players.find(p => p.id === event.related_player_id)?.name || '-'}</td>
-                    <td className="p-4 text-right space-x-2">
-                      <button onClick={() => handleEdit(event)} className="text-slate-400 hover:text-indigo-400 transition-colors p-1"><Edit2 className="w-4 h-4 inline" /></button>
+                    <td className="p-4 font-medium text-white text-right">{players.find(p => p.id === event.player_id)?.name}</td>
+                    <td className="p-4 text-slate-400 text-right">{players.find(p => p.id === event.related_player_id)?.name || '-'}</td>
+                    <td className="p-4 text-left space-x-2">
+                      <button onClick={() => handleEdit(event)} className="text-slate-400 hover:text-indigo-400 transition-colors p-1 ml-2"><Edit2 className="w-4 h-4 inline" /></button>
                       <button onClick={() => handleDelete(event.id)} className="text-slate-500 hover:text-red-400 transition-colors p-1"><Trash2 className="w-4 h-4 inline" /></button>
                     </td>
                   </tr>
@@ -281,7 +281,7 @@ const MatchEvents = () => {
                   <tr>
                     <td colSpan={5} className="p-12 text-center text-slate-500">
                       <Activity className="w-12 h-12 mx-auto mb-3 opacity-20" />
-                      <p>No events logged for this match yet.</p>
+                      <p>لا توجد أحداث مسجلة لهذه المباراة حتى الآن.</p>
                     </td>
                   </tr>
                 )}
