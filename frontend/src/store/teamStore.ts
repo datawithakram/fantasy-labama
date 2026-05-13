@@ -39,9 +39,11 @@ const MAX_PLAYERS = {
   FWD: 3
 };
 
+const INITIAL_BUDGET = 100.0;
+
 export const useTeamStore = create<TeamStore>((set, get) => ({
   selectedPlayers: [],
-  budget: 100.0,
+  budget: INITIAL_BUDGET,
   activeChips: [],
   maxPerClub: 3,
 
