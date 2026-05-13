@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Play, RotateCcw, AlertCircle, Calendar, Save, Trash2, CheckCircle2 } from 'lucide-react';
+import { RotateCcw, AlertCircle, Calendar, Save, Trash2, CheckCircle2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface Round {
