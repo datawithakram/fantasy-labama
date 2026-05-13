@@ -143,14 +143,14 @@ export function Transfers() {
       const result = await response.json();
       console.log('[Transfers] API Response:', { status: response.status, data: result });
 
-      if (!response.ok) throw new Error(result.error || 'Failed to confirm transfers');
+      if (!response.ok) throw new Error(result.error || 'فشل في تأكيد الانتقالات');
 
       console.log('[Transfers] Changes saved successfully');
-      setMessage({ text: 'Transfers confirmed successfully!', type: 'success' });
+      setMessage({ text: 'تم تأكيد الانتقالات بنجاح!', type: 'success' });
       setTimeout(() => setMessage(null), 5000);
     } catch (err: any) {
       console.error('[Transfers] Error saving changes:', err);
-      setMessage({ text: err.message || 'Failed to save changes.', type: 'error' });
+      setMessage({ text: err.message || 'فشل في حفظ التغييرات.', type: 'error' });
     } finally {
       setSaving(false);
     }
@@ -168,7 +168,7 @@ export function Transfers() {
             <Plus className="h-5 w-5 md:h-6 md:w-6 text-white/20 group-hover:scale-110 transition-transform" />
           </div>
           <div className="bg-black/40 backdrop-blur-md text-white text-[8px] md:text-[10px] font-black px-2 md:px-3 py-1 rounded-full uppercase tracking-tighter">
-            {pos}
+            {pos === 'GK' ? 'حارس' : pos === 'DEF' ? 'دفاع' : pos === 'MID' ? 'وسط' : 'هجوم'}
           </div>
         </button>
       );
@@ -202,17 +202,17 @@ export function Transfers() {
         <div className="mt-1 md:mt-2 w-full flex flex-col items-center shadow-lg rounded-lg overflow-hidden max-w-[70px] md:max-w-none">
           <div className="bg-slate-900 text-white text-[8px] md:text-xs font-black px-1 md:px-2 py-0.5 md:py-1 w-full text-center truncate border-b border-white/5 relative">
             {player.is_captain && (
-               <span className="absolute left-1 top-1/2 -translate-y-1/2 bg-amber-500 text-slate-900 text-[6px] md:text-[8px] w-3 h-3 md:w-4 md:h-4 flex items-center justify-center rounded-sm font-black">
+               <span className="absolute right-1 top-1/2 -translate-y-1/2 bg-amber-500 text-slate-900 text-[6px] md:text-[8px] w-3 h-3 md:w-4 md:h-4 flex items-center justify-center rounded-sm font-black">
                  {useTeamStore.getState().activeChips.includes('triple_captain') ? 'TC' : 'C'}
                </span>
             )}
             {player.is_vice && (
-               <span className="absolute left-1 top-1/2 -translate-y-1/2 bg-slate-200 text-slate-900 text-[6px] md:text-[8px] w-3 h-3 md:w-4 md:h-4 flex items-center justify-center rounded-sm font-black">V</span>
+               <span className="absolute right-1 top-1/2 -translate-y-1/2 bg-slate-200 text-slate-900 text-[6px] md:text-[8px] w-3 h-3 md:w-4 md:h-4 flex items-center justify-center rounded-sm font-black">V</span>
             )}
             {player.name.split(' ').pop()}
           </div>
           <div className="bg-white text-slate-900 text-[8px] md:text-xs font-black px-1 md:px-2 py-0.5 md:py-1 w-full text-center">
-            £{player.price}m
+            {player.price}m
           </div>
         </div>
       </div>
@@ -224,39 +224,39 @@ export function Transfers() {
       {/* Header Info */}
       <div className="flex flex-col lg:flex-row gap-4 md:gap-6 items-stretch">
          <div className="flex-1 flex gap-3 md:gap-4">
-            <div className="fantasy-card flex-1 p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-gradient-to-br from-[var(--card)] to-[var(--muted)] border-l-4 border-rose-500">
+            <div className="fantasy-card flex-1 p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-gradient-to-br from-[var(--card)] to-[var(--muted)] border-r-4 border-rose-500">
                <div className="p-2 md:p-3 bg-rose-500/10 rounded-xl md:rounded-2xl text-rose-500"><ArrowRightLeft className="w-5 h-5 md:w-6 md:h-6" /></div>
                <div>
-                  <p className="text-[8px] md:text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest">Squad Size</p>
+                  <p className="text-[8px] md:text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-right">عدد اللاعبين</p>
                   <p className="text-lg md:text-2xl font-black">{selectedPlayers.length} <span className="text-[10px] md:text-xs text-[var(--muted-foreground)] font-bold">/ 15</span></p>
                </div>
             </div>
-            <div className="fantasy-card flex-1 p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-gradient-to-br from-[var(--card)] to-[var(--muted)] border-l-4 border-emerald-500">
+            <div className="fantasy-card flex-1 p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-gradient-to-br from-[var(--card)] to-[var(--muted)] border-r-4 border-emerald-500">
                <div className="p-2 md:p-3 bg-emerald-500/10 rounded-xl md:rounded-2xl text-emerald-500"><DollarSign className="w-5 h-5 md:w-6 md:h-6" /></div>
                <div>
-                  <p className="text-[8px] md:text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest">Budget</p>
-                  <p className="text-lg md:text-2xl font-black text-emerald-500">£{budget.toFixed(1)}m</p>
+                  <p className="text-[8px] md:text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-right">الميزانية</p>
+                  <p className="text-lg md:text-2xl font-black text-emerald-500">{budget.toFixed(1)}m</p>
                </div>
             </div>
             
-            <div className="fantasy-card flex-1 p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-gradient-to-br from-[var(--card)] to-[var(--muted)] border-l-4 border-amber-500">
+            <div className="fantasy-card flex-1 p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-gradient-to-br from-[var(--card)] to-[var(--muted)] border-r-4 border-amber-500">
                <div className="p-2 md:p-3 bg-amber-500/10 rounded-xl md:rounded-2xl text-amber-500"><ArrowRightLeft className="w-5 h-5 md:w-6 md:h-6" /></div>
                <div>
-                  <p className="text-[8px] md:text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest">Transfers</p>
+                  <p className="text-[8px] md:text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest text-right">الانتقالات</p>
                   <p className="text-lg md:text-2xl font-black">
                     {transfersMade} 
-                    <span className="text-[10px] md:text-xs text-[var(--muted-foreground)] font-bold ml-1">
-                       (Free: {freeLimit})
+                    <span className="text-[10px] md:text-xs text-[var(--muted-foreground)] font-bold mr-1">
+                       (المجانية: {freeLimit})
                     </span>
                   </p>
                </div>
             </div>
 
             {pointsCost > 0 && (
-              <div className="fantasy-card flex-1 p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-rose-500/10 border-l-4 border-rose-500 animate-pulse">
+              <div className="fantasy-card flex-1 p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-rose-500/10 border-r-4 border-rose-500 animate-pulse">
                 <div>
-                   <p className="text-[8px] md:text-[10px] font-black text-rose-500 uppercase tracking-widest">Cost</p>
-                   <p className="text-lg md:text-2xl font-black text-rose-500">-{pointsCost} pts</p>
+                   <p className="text-[8px] md:text-[10px] font-black text-rose-500 uppercase tracking-widest text-right">التكلفة</p>
+                   <p className="text-lg md:text-2xl font-black text-rose-500">-{pointsCost} نقطة</p>
                 </div>
               </div>
             )}
@@ -269,14 +269,14 @@ export function Transfers() {
                className="fantasy-button bg-[var(--primary)] text-white shadow-lg shadow-[var(--primary)]/30 hover:scale-105 flex-1 md:flex-none md:h-full py-3 md:px-10 flex items-center justify-center gap-3 disabled:opacity-30 transition-all"
             >
                {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />}
-               <span className="font-black uppercase tracking-tighter text-sm">{saving ? 'Confirming...' : 'Confirm Transfers'}</span>
+               <span className="font-black uppercase tracking-tighter text-sm">{saving ? 'جاري التأكيد...' : 'تأكيد الانتقالات'}</span>
             </button>
          </div>
       </div>
 
       {message && (
         <div className={cn(
-          "p-4 rounded-2xl flex items-center gap-4 font-bold animate-in zoom-in duration-300 border-2",
+          "p-4 rounded-2xl flex items-center gap-4 font-bold animate-in zoom-in duration-300 border-2 text-right",
           message.type === 'error' ? "bg-rose-500/10 border-rose-500/20 text-rose-500" : "bg-emerald-500/10 border-emerald-500/20 text-emerald-500"
         )}>
           {message.type === 'error' ? <ShieldAlert className="w-6 h-6" /> : <CheckCircle2 className="w-6 h-6" />}
@@ -328,24 +328,24 @@ export function Transfers() {
               <div className="p-6 border-b border-[var(--border)] bg-gradient-to-r from-[var(--primary)]/10 to-transparent">
                  <div className="flex items-center justify-between mb-6">
                     <div>
-                       <h2 className="text-xl font-black italic uppercase tracking-tighter">Market <span className="text-[var(--primary)]">HQ</span></h2>
-                       <p className="text-[9px] font-black text-[var(--muted-foreground)] uppercase tracking-widest mt-1">Refine your squad</p>
+                       <h2 className="text-xl font-black italic uppercase tracking-tighter text-right">سوق <span className="text-[var(--primary)]">اللاعبين</span></h2>
+                       <p className="text-[9px] font-black text-[var(--muted-foreground)] uppercase tracking-widest mt-1 text-right">قم بتعديل تشكيلتك</p>
                     </div>
                     <div className="flex items-center gap-2 text-[var(--primary)]">
                        <TrendingUp className="w-5 h-5" />
-                       <span className="text-xs font-black">LIVE</span>
+                       <span className="text-xs font-black">مباشر</span>
                     </div>
                  </div>
                  
                  <div className="space-y-4">
                     <div className="relative group">
-                       <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted-foreground)] group-focus-within:text-[var(--primary)] transition-colors" />
+                       <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted-foreground)] group-focus-within:text-[var(--primary)] transition-colors" />
                        <input 
                           type="text" 
-                          placeholder="Search player name..."
+                          placeholder="ابحث عن لاعب..."
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          className="w-full bg-[var(--muted)] border-none rounded-xl pl-12 pr-4 py-4 text-sm font-bold focus:ring-2 focus:ring-[var(--primary)] transition-all"
+                          className="w-full bg-[var(--muted)] border-none rounded-xl pr-12 pl-4 py-4 text-sm font-bold focus:ring-2 focus:ring-[var(--primary)] transition-all"
                        />
                     </div>
                     
@@ -361,22 +361,22 @@ export function Transfers() {
                                   : "bg-[var(--muted)] text-[var(--muted-foreground)] hover:bg-[var(--border)]"
                              )}
                           >
-                             {pos}
+                             {pos === 'ALL' ? 'الكل' : pos === 'GK' ? 'حارس' : pos === 'DEF' ? 'دفاع' : pos === 'MID' ? 'وسط' : 'هجوم'}
                           </button>
                        ))}
                     </div>
 
                      {/* Chips Selection */}
                      <div className="pt-4 border-t border-[var(--border)] mt-2">
-                       <p className="text-[9px] font-black text-[var(--muted-foreground)] uppercase tracking-widest mb-3 flex items-center gap-2">
-                          <TrendingUp className="w-3 h-3 text-[var(--primary)]" /> Tactical Chips
+                       <p className="text-[9px] font-black text-[var(--muted-foreground)] uppercase tracking-widest mb-3 flex items-center gap-2 text-right">
+                          <TrendingUp className="w-3 h-3 text-[var(--primary)]" /> الخواص التكتيكية
                        </p>
                        <div className="grid grid-cols-2 gap-2">
                          {[
-                           { id: 'wildcard', name: 'Wildcard', desc: 'Unlimited' },
-                           { id: 'triple_captain', name: 'Triple Cap', desc: '3x Pts' },
-                           { id: 'bench_boost', name: 'Bench Boost', desc: 'Bench Pts' },
-                           { id: '12th_man', name: '12th Man', desc: '+1 Player' }
+                           { id: 'wildcard', name: 'الوايلد كارد', desc: 'تغييرات لا محدودة' },
+                           { id: 'triple_captain', name: 'الكابتن الثلاثي', desc: '3 أضعاف النقاط' },
+                           { id: 'bench_boost', name: 'تفعيل الدكة', desc: 'نقاط الاحتياط تحسب' },
+                           { id: '12th_man', name: 'اللاعب الـ12', desc: 'لاعب إضافي' }
                          ].map(chip => {
                            const isActive = useTeamStore.getState().activeChips.includes(chip.id);
                            return (
@@ -384,7 +384,7 @@ export function Transfers() {
                                key={chip.id}
                                onClick={() => useTeamStore.getState().toggleChip(chip.id)}
                                className={cn(
-                                 "p-2 rounded-xl border transition-all text-left relative",
+                                 "p-2 rounded-xl border transition-all text-right relative",
                                  isActive 
                                    ? "bg-[var(--primary)] border-[var(--primary)] text-white shadow-md shadow-[var(--primary)]/20" 
                                    : "bg-[var(--muted)] border-transparent text-[var(--foreground)] hover:border-[var(--primary)]/30"
@@ -407,7 +407,7 @@ export function Transfers() {
                     .map(player => {
                        const isSelected = selectedPlayers.some(sp => sp.id === player.id);
                        const clubCount = selectedPlayers.filter(p => p.club_id === player.club_id).length;
-                       const isClubLimitReached = clubCount >= 3;
+                       const isClubLimitReached = clubCount >= (maxPerClub || 3);
                        const isBudgetExceeded = budget < player.price;
                        const isDisabled = (isClubLimitReached || isBudgetExceeded) && !isSelected;
 
@@ -436,7 +436,7 @@ export function Transfers() {
                                    <Shield className="w-5 h-5 opacity-20" />
                                    <span className="absolute inset-0 flex items-center justify-center text-[8px] font-black">{player.position}</span>
                                 </div>
-                                <div>
+                                <div className="text-right">
                                    <h4 className="text-sm font-black text-[var(--foreground)]">{player.name}</h4>
                                    <p className="text-[10px] font-bold text-[var(--muted-foreground)] uppercase tracking-tight">
                                       {clubs[player.club_id]?.name}
@@ -446,7 +446,7 @@ export function Transfers() {
                              
                              <div className="flex items-center gap-4">
                                 <span className={cn("text-sm font-black", isBudgetExceeded && !isSelected ? "text-rose-500" : "text-[var(--primary)]")}>
-                                   £{player.price}m
+                                   {player.price}m
                                 </span>
                                 <button 
                                    className={cn(
@@ -465,15 +465,15 @@ export function Transfers() {
                  }
               </div>
 
-              <div className="p-4 bg-[var(--muted)]/50 border-t border-[var(--border)]">
+              <div className="p-4 bg-[var(--muted)]/50 border-t border-[var(--border)] text-right">
                  <div className="flex items-center gap-3 text-[9px] font-bold text-[var(--muted-foreground)] uppercase tracking-tighter leading-tight">
                     <Info className="w-4 h-4 text-[var(--primary)] shrink-0" />
-                    <p>Max {maxPerClub} players per club. Maintain 15 players within £100m. Transferred players must match position of removed players.</p>
+                    <p>الحد الأقصى {maxPerClub || 3} لاعبين من نفس النادي. يجب الحفاظ على 15 لاعباً ضمن ميزانية 100m. اللاعبون المنضمون يجب أن يطابقوا مراكز اللاعبين المستبعدين.</p>
                  </div>
               </div>
            </div>
         </div>
-      </div>
+      </div>div>
 
       <PlayerPickerModal
         isOpen={pickerState.isOpen}

@@ -124,7 +124,7 @@ export function MatchCenter() {
     
     if (player.matchStatus !== 'not_started') {
       console.warn('[MatchCenter] Captain change blocked: match already started');
-      setMessage({ text: 'Cannot captain a player whose match has already started.', type: 'error' });
+      setMessage({ text: 'لا يمكن تعيين كابتن لفريق بدأت مباراته بالفعل.', type: 'error' });
       return;
     }
     try {
@@ -141,14 +141,14 @@ export function MatchCenter() {
       console.log('[MatchCenter] API Response:', result);
 
       if (result.success) {
-        setMessage({ text: 'Captain changed successfully!', type: 'success' });
+        setMessage({ text: 'تم تغيير الكابتن بنجاح!', type: 'success' });
         loadLiveTeam();
       } else {
-        setMessage({ text: result.error || 'Failed to change captain.', type: 'error' });
+        setMessage({ text: result.error || 'فشل في تغيير الكابتن.', type: 'error' });
       }
     } catch (err: any) {
       console.error('[MatchCenter] Captain change error:', err);
-      setMessage({ text: 'API Connection Error', type: 'error' });
+      setMessage({ text: 'خطأ في الاتصال بالخادم', type: 'error' });
     }
   };
 
@@ -158,9 +158,9 @@ export function MatchCenter() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'not_started': return <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 text-[8px] font-black uppercase flex items-center gap-1"><Clock className="w-2 h-2" /> Upcoming</span>;
-      case 'live': return <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[8px] font-black uppercase flex items-center gap-1 animate-pulse"><PlayCircle className="w-2 h-2" /> Live</span>;
-      case 'finished': return <span className="px-2 py-0.5 rounded-full bg-slate-900 text-white text-[8px] font-black uppercase flex items-center gap-1"><CheckCircle2 className="w-2 h-2" /> Full Time</span>;
+      case 'not_started': return <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 text-[8px] font-black uppercase flex items-center gap-1"><Clock className="w-2 h-2" /> قادمة</span>;
+      case 'live': return <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[8px] font-black uppercase flex items-center gap-1 animate-pulse"><PlayCircle className="w-2 h-2" /> مباشر</span>;
+      case 'finished': return <span className="px-2 py-0.5 rounded-full bg-slate-900 text-white text-[8px] font-black uppercase flex items-center gap-1"><CheckCircle2 className="w-2 h-2" /> انتهت</span>;
       default: return null;
     }
   };
@@ -169,7 +169,7 @@ export function MatchCenter() {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
         <Activity className="w-12 h-12 text-[var(--primary)] animate-pulse" />
-        <p className="font-black italic uppercase tracking-tighter text-[var(--muted-foreground)]">Scanning live pitch data...</p>
+        <p className="font-black italic uppercase tracking-tighter text-[var(--muted-foreground)] text-center">جاري جلب بيانات المباريات المباشرة...</p>
       </div>
     );
   }
@@ -182,9 +182,9 @@ export function MatchCenter() {
             <div className="w-10 h-10 bg-[var(--primary)] rounded-xl flex items-center justify-center text-white shadow-lg shadow-[var(--primary)]/30">
                <TrendingUp className="w-5 h-5" />
             </div>
-            <div>
-               <p className="text-[8px] font-black uppercase text-[var(--muted-foreground)] leading-none mb-1">Live Score</p>
-               <p className="text-xl font-black italic">{totalPoints} pts</p>
+            <div className="text-right">
+               <p className="text-[8px] font-black uppercase text-[var(--muted-foreground)] leading-none mb-1">النقاط الحية</p>
+               <p className="text-xl font-black italic">{totalPoints} نقطة</p>
             </div>
          </div>
          <button onClick={loadLiveTeam} className="p-2 rounded-xl bg-[var(--muted)] text-[var(--muted-foreground)]">
@@ -194,20 +194,20 @@ export function MatchCenter() {
 
       <div className="flex flex-col lg:flex-row gap-4 md:gap-6 items-stretch">
          <div className="hidden md:flex flex-1 flex gap-3 md:gap-4">
-            <div className="fantasy-card flex-1 min-w-[200px] p-6 flex items-center gap-5 bg-gradient-to-br from-[var(--primary)] to-indigo-700 text-white border-none shadow-xl shadow-[var(--primary)]/20">
+            <div className="fantasy-card flex-1 min-w-[200px] p-6 flex items-center gap-5 bg-gradient-to-br from-[var(--primary)] to-indigo-700 text-white border-none shadow-xl shadow-[var(--primary)]/20 border-r-4 border-white/20">
                <div className="p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10"><TrendingUp className="w-8 h-8" /></div>
                <div>
-                  <p className="text-[10px] font-black text-white/60 uppercase tracking-widest leading-none mb-1">Live Gameweek Points</p>
-                  <p className="text-4xl font-black italic">{totalPoints}</p>
+                  <p className="text-[10px] font-black text-white/60 uppercase tracking-widest leading-none mb-1 text-right">نقاط الجولة الحالية</p>
+                  <p className="text-4xl font-black italic text-right">{totalPoints}</p>
                </div>
             </div>
-            <div className="fantasy-card flex-1 min-w-[200px] p-6 flex items-center gap-5 bg-gradient-to-br from-[var(--card)] to-[var(--muted)]">
+            <div className="fantasy-card flex-1 min-w-[200px] p-6 flex items-center gap-5 bg-gradient-to-br from-[var(--card)] to-[var(--muted)] border-r-4 border-emerald-500">
                <div className="p-4 bg-emerald-500/10 rounded-2xl text-emerald-500"><Activity className="w-8 h-8" /></div>
-               <div>
-                  <p className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest leading-none mb-1">System Status</p>
+               <div className="text-right">
+                  <p className="text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest leading-none mb-1">حالة النظام</p>
                   <div className="flex items-center gap-2">
                      <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
-                     <p className="text-xl font-black uppercase tracking-tighter">Live Updates</p>
+                     <p className="text-xl font-black uppercase tracking-tighter">تحديثات مباشرة</p>
                   </div>
                </div>
             </div>
@@ -217,16 +217,16 @@ export function MatchCenter() {
             <button onClick={loadLiveTeam} className="fantasy-button bg-[var(--card)] border border-[var(--border)] p-4 flex items-center gap-2 hover:bg-[var(--muted)]">
                <RefreshCw className="w-5 h-5" />
             </button>
-            <div className="bg-slate-900 text-white px-6 py-4 rounded-2xl flex flex-col justify-center">
-               <p className="text-[8px] font-black uppercase tracking-widest text-white/40">Active Round</p>
-               <p className="text-sm font-black italic">GW 12 • 2026</p>
+            <div className="bg-slate-900 text-white px-6 py-4 rounded-2xl flex flex-col justify-center text-right">
+               <p className="text-[8px] font-black uppercase tracking-widest text-white/40">الجولة النشطة</p>
+               <p className="text-sm font-black italic">الجولة 12 • 2026</p>
             </div>
          </div>
       </div>
 
       {message && (
         <div className={cn(
-          "p-4 rounded-2xl flex items-center gap-4 font-bold border-2 animate-in zoom-in duration-300",
+          "p-4 rounded-2xl flex items-center gap-4 font-bold border-2 animate-in zoom-in duration-300 text-right",
           message.type === 'error' ? "bg-rose-500/10 border-rose-500/20 text-rose-500" : "bg-emerald-500/10 border-emerald-500/20 text-emerald-500"
         )}>
           {message.type === 'error' ? <XCircle className="w-6 h-6" /> : <CheckCircle2 className="w-6 h-6" />}
@@ -238,7 +238,7 @@ export function MatchCenter() {
         <div className="xl:col-span-2 space-y-4 md:space-y-6">
            <div className="flex items-center justify-between px-2">
               <h2 className="text-xl md:text-2xl font-black italic uppercase tracking-tighter flex items-center gap-3">
-                 Starting <span className="text-[var(--primary)]">XI</span>
+                 التشكيلة <span className="text-[var(--primary)]">الأساسية</span>
                  <div className="w-8 h-8 bg-[var(--muted)] rounded-lg flex items-center justify-center text-[10px] font-black not-italic text-[var(--muted-foreground)]">11</div>
               </h2>
            </div>
@@ -260,15 +260,15 @@ export function MatchCenter() {
                              player.position === 'GK' ? "bg-amber-400" : "bg-indigo-500"
                           )}>
                              <Shield className="w-5 h-5 md:w-6 md:h-6 opacity-20" />
-                             {player.is_captain && <div className="absolute -top-1 -right-1 bg-amber-500 text-white text-[6px] md:text-[8px] font-black w-4 h-4 md:w-5 md:h-5 rounded-lg flex items-center justify-center border-2 border-white shadow-lg animate-bounce">C</div>}
+                             {player.is_captain && <div className="absolute -top-1 -left-1 bg-amber-500 text-white text-[6px] md:text-[8px] font-black w-4 h-4 md:w-5 md:h-5 rounded-lg flex items-center justify-center border-2 border-white shadow-lg animate-bounce">C</div>}
                           </div>
-                          <div>
+                          <div className="text-right">
                              <h4 className="text-sm md:text-base font-black text-[var(--foreground)] group-hover:text-[var(--primary)] transition-colors">{player.name}</h4>
                              <div className="mt-1">{getStatusBadge(player.matchStatus)}</div>
                           </div>
                        </div>
-                       <div className="text-right">
-                          <p className="text-[8px] font-black text-[var(--muted-foreground)] uppercase tracking-widest mb-1">Points</p>
+                       <div className="text-left">
+                          <p className="text-[8px] font-black text-[var(--muted-foreground)] uppercase tracking-widest mb-1">النقاط</p>
                           <p className="text-2xl md:text-3xl font-black italic leading-none text-[var(--primary)]">{player.points}</p>
                        </div>
                     </div>
@@ -276,26 +276,26 @@ export function MatchCenter() {
                     <div className="flex items-center justify-between pt-4 border-t border-[var(--border)]">
                        <div className="flex gap-3 md:gap-4">
                           <div className="text-center">
-                             <p className="text-[8px] font-black text-[var(--muted-foreground)] uppercase">Pos</p>
-                             <p className="text-[10px] md:text-xs font-black">{player.position}</p>
+                             <p className="text-[8px] font-black text-[var(--muted-foreground)] uppercase">المركز</p>
+                             <p className="text-[10px] md:text-xs font-black">{player.position === 'GK' ? 'حارس' : player.position === 'DEF' ? 'دفاع' : player.position === 'MID' ? 'وسط' : 'هجوم'}</p>
                           </div>
                           <div className="text-center">
-                             <p className="text-[8px] font-black text-[var(--muted-foreground)] uppercase">Value</p>
-                             <p className="text-[10px] md:text-xs font-black">£{player.price}m</p>
+                             <p className="text-[8px] font-black text-[var(--muted-foreground)] uppercase">القيمة</p>
+                             <p className="text-[10px] md:text-xs font-black">{player.price}m</p>
                           </div>
                        </div>
                        
                        <div className="flex gap-2">
                           {!player.is_captain && player.matchStatus === 'not_started' && (
                              <button 
-                                onClick={() => handleCaptainChange(player)}
+                                onClick={(e) => { e.stopPropagation(); handleCaptainChange(player); }}
                                 className="p-2 rounded-lg bg-[var(--muted)] text-[var(--muted-foreground)] hover:bg-[var(--primary)] hover:text-white transition-all shadow-sm"
                              >
                                 <Zap className="w-4 h-4" />
                              </button>
                           )}
                           <button className="p-2 rounded-lg bg-[var(--muted)] text-[var(--muted-foreground)] hover:bg-slate-900 hover:text-white transition-all shadow-sm">
-                             <ChevronRight className="w-4 h-4" />
+                             <ChevronRight className="w-4 h-4 rotate-180" />
                           </button>
                        </div>
                     </div>
@@ -307,7 +307,7 @@ export function MatchCenter() {
         <div className="space-y-8 md:space-y-10">
            <section className="space-y-4 md:space-y-6">
               <h2 className="text-xl md:text-2xl font-black italic uppercase tracking-tighter flex items-center gap-3">
-                 Sub <span className="text-[var(--primary)]">Bench</span>
+                 دكة <span className="text-[var(--primary)]">الاحتياط</span>
                  <div className="w-8 h-8 bg-[var(--muted)] rounded-lg flex items-center justify-center text-[10px] font-black not-italic text-[var(--muted-foreground)]">4</div>
               </h2>
               
@@ -320,14 +320,14 @@ export function MatchCenter() {
                     >
                        <div className="flex items-center gap-4">
                           <div className="w-10 h-12 bg-[var(--muted)] rounded-lg flex items-center justify-center text-[var(--muted-foreground)] text-[10px] font-black group-hover:bg-[var(--primary)]/10 group-hover:text-[var(--primary)] transition-all shadow-inner">
-                             {player.position}
+                             {player.position === 'GK' ? 'حارس' : player.position === 'DEF' ? 'دفاع' : player.position === 'MID' ? 'وسط' : 'هجوم'}
                           </div>
-                          <div>
+                          <div className="text-right">
                              <h5 className="text-sm font-black text-[var(--foreground)]">{player.name}</h5>
                              <div className="mt-1">{getStatusBadge(player.matchStatus)}</div>
                           </div>
                        </div>
-                       <div className="text-right">
+                       <div className="text-left">
                           <p className="text-xl font-black italic text-[var(--primary)]">{player.points}</p>
                        </div>
                     </div>
@@ -337,15 +337,15 @@ export function MatchCenter() {
 
            <section className="fantasy-card bg-slate-900 text-white p-6 border-none overflow-hidden relative shadow-2xl">
               <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 rounded-full blur-3xl"></div>
-              <h3 className="text-lg font-black italic uppercase tracking-tighter mb-4 flex items-center gap-2">
-                 <Trophy className="w-5 h-5 text-amber-500" /> Live Feed
+              <h3 className="text-lg font-black italic uppercase tracking-tighter mb-4 flex items-center gap-2 text-right">
+                 <Trophy className="w-5 h-5 text-amber-500" /> البث المباشر
               </h3>
-              <div className="space-y-4">
+              <div className="space-y-4 text-right">
                  <div className="flex gap-4 p-3 bg-white/5 rounded-xl border border-white/5 backdrop-blur-md">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 animate-pulse"></div>
                     <div>
-                       <p className="text-[10px] font-black uppercase tracking-widest text-white/60 mb-1">Latest Update</p>
-                       <p className="text-xs font-bold leading-relaxed">Goal scored in Liverpool vs Chelsea match. System calculating potential bonus points.</p>
+                       <p className="text-[10px] font-black uppercase tracking-widest text-white/60 mb-1">آخر التحديثات</p>
+                       <p className="text-xs font-bold leading-relaxed">تم تسجيل هدف في مباراة ليفربول وتشيلسي. يقوم النظام حالياً باحتساب نقاط المكافأة المحتملة.</p>
                     </div>
                  </div>
               </div>

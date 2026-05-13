@@ -114,14 +114,14 @@ export function Leagues() {
       if (memberError) throw memberError;
       console.log('[Leagues] User added as owner to league');
 
-      setMessage({ text: `League "${newLeagueName}" created! ${!isNewLeaguePublic ? 'Code: ' + code : ''}`, type: 'success' });
+      setMessage({ text: `تم إنشاء الدوري "${newLeagueName}" بنجاح! ${!isNewLeaguePublic ? 'كود الانضمام: ' + code : ''}`, type: 'success' });
       setNewLeagueName('');
       setIsNewLeaguePublic(false);
       setActiveTab('my');
       fetchMyLeagues();
     } catch (err: any) {
       console.error('[Leagues] Creation failed:', err);
-      setMessage({ text: `Failed to create league: ${err.message}`, type: 'error' });
+      setMessage({ text: `فشل إنشاء الدوري: ${err.message}`, type: 'error' });
     }
   };
 
@@ -135,17 +135,17 @@ export function Leagues() {
         .insert({ league_id: leagueId, user_id: user.id });
 
       if (memberError) {
-        if (memberError.code === '23505') throw new Error('You are already a member of this league.');
+        if (memberError.code === '23505') throw new Error('أنت بالفعل عضو في هذا الدوري.');
         throw memberError;
       }
 
       console.log('[Leagues] Successfully joined league');
-      setMessage({ text: `Successfully joined ${leagueName}!`, type: 'success' });
+      setMessage({ text: `تم الانضمام إلى ${leagueName} بنجاح!`, type: 'success' });
       setActiveTab('my');
       fetchMyLeagues();
     } catch (err: any) {
       console.error('[Leagues] Join failed:', err);
-      setMessage({ text: err.message || 'Failed to join league.', type: 'error' });
+      setMessage({ text: err.message || 'فشل في الانضمام للدوري.', type: 'error' });
     }
   };
 
@@ -163,7 +163,7 @@ export function Leagues() {
 
       if (leagueError) {
          console.warn('[Leagues] Invalid access code provided');
-         throw new Error('Invalid or expired access code.');
+         throw new Error('كود الوصول غير صحيح أو منتهي الصلاحية.');
       }
       
       console.log('[Leagues] Code valid, joining:', league.name);
@@ -171,7 +171,7 @@ export function Leagues() {
       setJoinCode('');
     } catch (err: any) {
       console.error('[Leagues] Private join error:', err);
-      setMessage({ text: err.message || 'Failed to join league.', type: 'error' });
+      setMessage({ text: err.message || 'فشل في الانضمام للدوري.', type: 'error' });
     }
   };
 
@@ -179,28 +179,28 @@ export function Leagues() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Header Info */}
       <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
-         <div>
-            <h1 className="text-3xl font-black italic uppercase tracking-tighter mb-2">Leagues <span className="text-[var(--primary)]">& Cups</span></h1>
-            <p className="text-[var(--muted-foreground)] font-bold">Compete with managers from around the globe.</p>
+         <div className="text-right w-full lg:w-auto">
+            <h1 className="text-3xl font-black italic uppercase tracking-tighter mb-2">الدوريات <span className="text-[var(--primary)]">والكؤوس</span></h1>
+            <p className="text-[var(--muted-foreground)] font-bold">تنافس مع مدربين من جميع أنحاء العالم.</p>
          </div>
          <div className="flex gap-3">
             <button 
               onClick={() => setActiveTab('join')}
               className="fantasy-button bg-[var(--muted)] text-[var(--foreground)] border border-[var(--border)] px-6"
             >
-              Join Private
+              انضم لدوري خاص
             </button>
             <button 
               onClick={() => setActiveTab('create')}
               className="fantasy-button bg-[var(--primary)] text-white shadow-lg shadow-[var(--primary)]/20 px-8 flex items-center gap-2"
             >
-              <Plus className="w-5 h-5" /> Create League
+              <Plus className="w-5 h-5" /> إنشاء دوري
             </button>
          </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 bg-[var(--muted)] p-1.5 rounded-2xl w-fit border border-[var(--border)]">
+      <div className="flex gap-2 bg-[var(--muted)] p-1.5 rounded-2xl w-fit border border-[var(--border)] mr-auto ml-auto md:mr-0">
         {(['my', 'public'] as const).map((tab) => (
           <button
             key={tab}
@@ -212,14 +212,14 @@ export function Leagues() {
                 : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
             )}
           >
-            {tab === 'my' ? 'My Leagues' : 'Public Explorer'}
+            {tab === 'my' ? 'دورياتي' : 'استكشاف الدوريات'}
           </button>
         ))}
       </div>
 
       {message && (
         <div className={cn(
-          "p-4 rounded-2xl flex items-center gap-4 font-bold border-2 animate-in zoom-in duration-300",
+          "p-4 rounded-2xl flex items-center gap-4 font-bold border-2 animate-in zoom-in duration-300 text-right",
           message.type === 'error' ? "bg-rose-500/10 border-rose-500/20 text-rose-500" : "bg-emerald-500/10 border-emerald-500/20 text-emerald-500"
         )}>
           {message.type === 'error' ? <Zap className="w-6 h-6 text-rose-500" /> : <Trophy className="w-6 h-6 text-emerald-500" />}
@@ -235,16 +235,16 @@ export function Leagues() {
                {loading ? (
                  <div className="flex flex-col items-center justify-center py-20 opacity-30 gap-4">
                     <Activity className="w-10 h-10 animate-spin" />
-                    <p className="font-black uppercase text-xs tracking-widest">Loading your leagues...</p>
+                    <p className="font-black uppercase text-xs tracking-widest text-center">جاري تحميل دورياتك...</p>
                  </div>
                ) : leagues.length === 0 ? (
                  <div className="fantasy-card p-12 flex flex-col items-center justify-center text-center gap-6 border-dashed bg-transparent">
                     <div className="p-6 bg-[var(--muted)] rounded-full text-[var(--muted-foreground)]"><Users className="w-12 h-12" /></div>
                     <div>
-                       <h3 className="text-xl font-black italic uppercase tracking-tighter">No leagues found</h3>
-                       <p className="text-[var(--muted-foreground)] text-sm font-bold max-w-xs mx-auto mt-2">You haven't joined any leagues yet. Why not join a public one or create your own?</p>
+                       <h3 className="text-xl font-black italic uppercase tracking-tighter">لم تنضم لأي دوري بعد</h3>
+                       <p className="text-[var(--muted-foreground)] text-sm font-bold max-w-xs mx-auto mt-2 text-center">لم تنضم لأي دوري بعد. لماذا لا تستكشف الدوريات العامة أو تنشئ دوريك الخاص؟</p>
                     </div>
-                    <button onClick={() => setActiveTab('public')} className="fantasy-button bg-[var(--primary)] text-white px-10">Explore Leagues</button>
+                    <button onClick={() => setActiveTab('public')} className="fantasy-button bg-[var(--primary)] text-white px-10">استكشف الدوريات</button>
                  </div>
                ) : (
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -255,18 +255,18 @@ export function Leagues() {
                                <Trophy className="w-6 h-6" />
                             </div>
                             {league.is_public ? (
-                               <span className="px-2 py-1 rounded-lg bg-emerald-500/10 text-emerald-500 text-[8px] font-black uppercase tracking-widest flex items-center gap-1 border border-emerald-500/20"><Globe className="w-2.5 h-2.5" /> Public</span>
+                               <span className="px-2 py-1 rounded-lg bg-emerald-500/10 text-emerald-500 text-[8px] font-black uppercase tracking-widest flex items-center gap-1 border border-emerald-500/20"><Globe className="w-2.5 h-2.5" /> عام</span>
                             ) : (
-                               <span className="px-2 py-1 rounded-lg bg-amber-500/10 text-amber-500 text-[8px] font-black uppercase tracking-widest flex items-center gap-1 border border-amber-500/20"><Shield className="w-2.5 h-2.5" /> Private</span>
+                               <span className="px-2 py-1 rounded-lg bg-amber-500/10 text-amber-500 text-[8px] font-black uppercase tracking-widest flex items-center gap-1 border border-amber-500/20"><Shield className="w-2.5 h-2.5" /> خاص</span>
                             )}
                          </div>
-                         <div className="mt-4">
+                         <div className="mt-4 text-right">
                             <h3 className="text-xl font-black italic uppercase tracking-tighter truncate">{league.name}</h3>
-                            <p className="text-[var(--muted-foreground)] text-[10px] font-black uppercase tracking-widest mt-1">ID: #{league.id.substring(0,6).toUpperCase()}</p>
+                            <p className="text-[var(--muted-foreground)] text-[10px] font-black uppercase tracking-widest mt-1">المعرف: #{league.id.substring(0,6).toUpperCase()}</p>
                          </div>
                          <div className="mt-6 flex items-center justify-between border-t border-[var(--border)] pt-4">
-                            {!league.is_public && <div className="text-[10px] font-black text-indigo-500 uppercase">Code: {league.code}</div>}
-                            <ChevronRight className="w-5 h-5 text-[var(--muted-foreground)] group-hover:text-[var(--primary)] group-hover:translate-x-1 transition-all" />
+                            {!league.is_public && <div className="text-[10px] font-black text-indigo-500 uppercase">كود الانضمام: {league.code}</div>}
+                            <ChevronRight className="w-5 h-5 text-[var(--muted-foreground)] group-hover:text-[var(--primary)] group-hover:-translate-x-1 transition-all rotate-180" />
                          </div>
                       </div>
                     ))}
@@ -278,7 +278,7 @@ export function Leagues() {
           {activeTab === 'public' && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                 <h2 className="text-xl font-black italic uppercase tracking-tighter">Public <span className="text-emerald-500">Explorer</span></h2>
+                 <h2 className="text-xl font-black italic uppercase tracking-tighter text-right w-full">استكشاف <span className="text-emerald-500">الدوريات العامة</span></h2>
                  <Search className="w-5 h-5 text-[var(--muted-foreground)]" />
               </div>
               <div className="grid gap-4 md:grid-cols-2">
@@ -286,18 +286,18 @@ export function Leagues() {
                     const isMember = leagues.some(l => l.id === league.id);
                     return (
                        <div key={league.id} className="fantasy-card p-6 flex flex-col justify-between min-h-[160px] border-emerald-500/10">
-                          <div>
+                          <div className="text-right">
                              <h4 className="text-lg font-black italic uppercase tracking-tighter">{league.name}</h4>
-                             <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mt-1 flex items-center gap-2"><Globe className="w-3 h-3" /> Open Enrollment</p>
+                             <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mt-1 flex items-center gap-2 justify-end"><Globe className="w-3 h-3" /> التسجيل مفتوح</p>
                           </div>
                           <div className="mt-6">
                              {isMember ? (
                                 <button className="w-full py-3 bg-emerald-500/10 text-emerald-500 rounded-xl text-xs font-black uppercase tracking-widest border border-emerald-500/20 cursor-default flex items-center justify-center gap-2">
-                                   <CheckCircle2 className="w-4 h-4" /> Already Joined
+                                   <CheckCircle2 className="w-4 h-4" /> انضممت بالفعل
                                 </button>
                              ) : (
                                 <button onClick={() => joinLeague(league.id, league.name)} className="w-full fantasy-button bg-[var(--primary)] text-white text-xs py-3 flex items-center justify-center gap-2">
-                                   <LogIn className="w-4 h-4" /> Join Now
+                                   <LogIn className="w-4 h-4" /> انضم الآن
                                 </button>
                              )}
                           </div>
@@ -316,33 +316,33 @@ export function Leagues() {
                          <div className="w-16 h-16 bg-[var(--primary)]/10 rounded-2xl flex items-center justify-center text-[var(--primary)] mx-auto mb-4">
                             <Plus className="w-8 h-8" />
                          </div>
-                         <h2 className="text-2xl font-black italic uppercase tracking-tighter">Create League</h2>
-                         <p className="text-[var(--muted-foreground)] font-bold text-sm mt-1">Start a new competition with custom rules.</p>
+                         <h2 className="text-2xl font-black italic uppercase tracking-tighter">إنشاء دوري جديد</h2>
+                         <p className="text-[var(--muted-foreground)] font-bold text-sm mt-1 text-center">ابدأ منافسة جديدة بقوانين مخصصة.</p>
                       </div>
-                      <div className="space-y-6">
+                      <div className="space-y-6 text-right">
                          <div>
-                            <label className="block text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest mb-2">League Name</label>
+                            <label className="block text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest mb-2 text-right">اسم الدوري</label>
                             <input 
                               type="text" 
                               value={newLeagueName}
                               onChange={(e) => setNewLeagueName(e.target.value)}
-                              placeholder="e.g. Master League Elite"
-                              className="w-full bg-[var(--muted)] border-none rounded-xl px-6 py-4 text-sm font-bold focus:ring-2 focus:ring-[var(--primary)] transition-all"
+                              placeholder="مثال: دوري النخبة"
+                              className="w-full bg-[var(--muted)] border-none rounded-xl px-6 py-4 text-sm font-bold focus:ring-2 focus:ring-[var(--primary)] transition-all text-right"
                               required
                             />
                          </div>
-                         <div className="flex items-center gap-4 p-4 bg-[var(--muted)] rounded-xl border border-[var(--border)]">
+                         <div className="flex items-center gap-4 p-4 bg-[var(--muted)] rounded-xl border border-[var(--border)] justify-end">
+                            <label htmlFor="is_public_new" className="text-xs font-black uppercase tracking-tight text-[var(--foreground)] order-1">اجعل هذا الدوري عاماً للجميع</label>
                             <input 
                                type="checkbox" 
                                id="is_public_new"
                                checked={isNewLeaguePublic}
                                onChange={(e) => setIsNewLeaguePublic(e.target.checked)}
-                               className="w-5 h-5 rounded-lg border-none bg-white text-[var(--primary)] focus:ring-[var(--primary)]"
+                               className="w-5 h-5 rounded-lg border-none bg-white text-[var(--primary)] focus:ring-[var(--primary)] order-2"
                             />
-                            <label htmlFor="is_public_new" className="text-xs font-black uppercase tracking-tight text-[var(--foreground)]">Make this league Public</label>
                          </div>
                       </div>
-                      <button type="submit" className="w-full fantasy-button bg-[var(--primary)] text-white py-4 shadow-xl shadow-[var(--primary)]/20">Initialize League</button>
+                      <button type="submit" className="w-full fantasy-button bg-[var(--primary)] text-white py-4 shadow-xl shadow-[var(--primary)]/20">تأكيد الإنشاء</button>
                    </form>
                 ) : (
                    <form onSubmit={handleJoinPrivateLeague} className="space-y-8">
@@ -350,64 +350,64 @@ export function Leagues() {
                          <div className="w-16 h-16 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-500 mx-auto mb-4">
                             <Hash className="w-8 h-8" />
                          </div>
-                         <h2 className="text-2xl font-black italic uppercase tracking-tighter">Join Private</h2>
-                         <p className="text-[var(--muted-foreground)] font-bold text-sm mt-1">Enter a secure code to access a private league.</p>
+                         <h2 className="text-2xl font-black italic uppercase tracking-tighter">الانضمام لدوري خاص</h2>
+                         <p className="text-[var(--muted-foreground)] font-bold text-sm mt-1 text-center">أدخل الكود السري للوصول للدوري.</p>
                       </div>
-                      <div className="space-y-6">
+                      <div className="space-y-6 text-right">
                          <div>
-                            <label className="block text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest mb-2">League Access Code</label>
+                            <label className="block text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest mb-2 text-right">كود الوصول للدوري</label>
                             <input 
                               type="text" 
                               value={joinCode}
                               onChange={(e) => setJoinCode(e.target.value)}
-                              placeholder="e.g. ALPHA99"
-                              className="w-full bg-[var(--muted)] border-none rounded-xl px-6 py-4 text-sm font-bold focus:ring-2 focus:ring-[var(--primary)] transition-all uppercase"
+                              placeholder="مثال: ALPHA99"
+                              className="w-full bg-[var(--muted)] border-none rounded-xl px-6 py-4 text-sm font-bold focus:ring-2 focus:ring-[var(--primary)] transition-all uppercase text-right"
                               required
                             />
                          </div>
                       </div>
-                      <button type="submit" className="w-full fantasy-button bg-indigo-600 text-white py-4 shadow-xl shadow-indigo-600/20">Validate & Join</button>
+                      <button type="submit" className="w-full fantasy-button bg-indigo-600 text-white py-4 shadow-xl shadow-indigo-600/20">تحقق وانضم الآن</button>
                    </form>
                 )}
-                <button onClick={() => setActiveTab('my')} className="w-full mt-6 text-xs font-black uppercase text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Go back</button>
+                <button onClick={() => setActiveTab('my')} className="w-full mt-6 text-xs font-black uppercase text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors text-center">العودة للخلف</button>
              </div>
           )}
         </div>
 
         {/* Sidebar Info */}
         <div className="space-y-8">
-           <section className="fantasy-card p-6 bg-gradient-to-br from-indigo-600 to-indigo-800 text-white border-none shadow-xl">
-              <h3 className="text-lg font-black italic uppercase tracking-tighter mb-4 flex items-center gap-2">
-                 <Zap className="w-5 h-5 text-amber-400" /> Season Info
+           <section className="fantasy-card p-6 bg-gradient-to-br from-indigo-600 to-indigo-800 text-white border-none shadow-xl text-right">
+              <h3 className="text-lg font-black italic uppercase tracking-tighter mb-4 flex items-center gap-2 justify-end">
+                 معلومات الموسم <Zap className="w-5 h-5 text-amber-400" />
               </h3>
               <div className="space-y-4">
                  <div className="flex items-center justify-between text-xs font-bold text-white/60">
-                    <span>Active Leagues</span>
                     <span className="text-white">{totalLeagues.toLocaleString()}</span>
+                    <span>الدوريات النشطة</span>
                  </div>
                  <div className="flex items-center justify-between text-xs font-bold text-white/60">
-                    <span>Global Rank</span>
                     <span className="text-white">#--</span>
+                    <span>الترتيب العالمي</span>
                  </div>
-                 <div className="pt-4 border-t border-white/10">
+                 <div className="pt-4 border-t border-white/10 text-right">
                     <p className="text-[10px] font-medium leading-relaxed opacity-80">
-                       Leagues are updated after every match. Ensure your team is saved before the deadline to count points for your leagues.
+                       يتم تحديث الدوريات بعد كل مباراة. تأكد من حفظ فريقك قبل الموعد النهائي لتُحسب النقاط في دورياتك.
                     </p>
                  </div>
               </div>
            </section>
 
-           <section className="fantasy-card p-6 space-y-4 border-dashed bg-transparent">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted-foreground)]">Global Highlights</h4>
+           <section className="fantasy-card p-6 space-y-4 border-dashed bg-transparent text-right">
+              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted-foreground)]">أبرز الدوريات العالمية</h4>
               <div className="space-y-4">
                  {[1, 2].map((i) => (
-                    <div key={i} className="flex gap-4">
+                    <div key={i} className="flex gap-4 justify-end">
+                       <div className="text-right">
+                          <p className="text-xs font-bold truncate max-w-[150px]">كأس العالم للنخبة {i}</p>
+                          <p className="text-[10px] text-[var(--muted-foreground)]">2.4k عضو</p>
+                       </div>
                        <div className="w-10 h-10 bg-[var(--muted)] rounded-xl flex items-center justify-center shrink-0">
                           <Users className="w-4 h-4 text-[var(--muted-foreground)]" />
-                       </div>
-                       <div>
-                          <p className="text-xs font-bold truncate max-w-[150px]">World Elite Cup {i}</p>
-                          <p className="text-[10px] text-[var(--muted-foreground)]">2.4k Members</p>
                        </div>
                     </div>
                  ))}
@@ -416,6 +416,7 @@ export function Leagues() {
         </div>
       </div>
     </div>
+  );
   );
 }
 
