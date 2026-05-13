@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "npm run build && wrangler deploy --non-interactive"
+    "deploy": "npm run build && wrangler pages deploy dist --project-name fantasy-labama-admin"
   },
   "dependencies": {
     "@capacitor/android": "^8.3.3",
