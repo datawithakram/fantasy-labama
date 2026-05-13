@@ -473,7 +473,7 @@ export function Transfers() {
               </div>
            </div>
         </div>
-      </div>div>
+      </div>
 
       <PlayerPickerModal
         isOpen={pickerState.isOpen}

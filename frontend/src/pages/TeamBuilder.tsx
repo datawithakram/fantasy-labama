@@ -531,7 +531,7 @@ export function TeamBuilder() {
         type={alertState.type} 
         title={alertState.title} 
         message={alertState.message} 
-      />    />
+      />
 
       <PlayerPickerModal
         isOpen={pickerState.isOpen}

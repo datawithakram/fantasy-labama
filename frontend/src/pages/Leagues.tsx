@@ -417,7 +417,6 @@ export function Leagues() {
       </div>
     </div>
   );
-  );
 }
 
 function Activity({ className }: { className?: string }) {
