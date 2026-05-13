@@ -121,28 +121,56 @@ app.post('/api/transfers', authenticate, validateDeadline, async (req, res) => {
     const { data: team } = await supabase.from('user_teams').select('*').eq('id', team_id).eq('user_id', req.user.id).single();
     if (!team) return res.status(404).json({ error: 'Team not found.' });
 
-    // 2. Get Current Round
-    const { data: round } = await supabase.from('rounds').select('id').eq('is_current', true).maybeSingle();
-    const roundId = round?.id;
-
-    // 3. Fetch Player Prices and check budget
-    const playerIds = selectedPlayers.map(p => p.id);
-    const { data: dbPlayers } = await supabase.from('players').select('id, price, position').in('id', playerIds);
+    // 2. Get Current Round Info (including stage rules)
+    const { data: round } = await supabase.from('rounds')
+      .select('id, stage, max_players_per_club, free_transfers_allowed')
+      .eq('is_current', true)
+      .maybeSingle();
     
+    if (!round) return res.status(400).json({ error: 'No active round found.' });
+    const roundId = round.id;
+
+    // 3. Fetch Player Details (Price, Position, Club)
+    const playerIds = selectedPlayers.map(p => p.id);
+    const { data: dbPlayers } = await supabase.from('players').select('id, price, position, club_id').in('id', playerIds);
+    
+    // Check Budget (100.0 limit)
     const totalPrice = dbPlayers.reduce((sum, p) => sum + p.price, 0);
     if (totalPrice > 100.0) {
        return res.status(400).json({ error: `Insufficient budget. Total cost: £${totalPrice}m` });
     }
 
+    // Check Club Player Limits (e.g., 3 per club in group stage)
+    const clubCounts = {};
+    dbPlayers.forEach(p => {
+      clubCounts[p.club_id] = (clubCounts[p.club_id] || 0) + 1;
+    });
+    const exceedingClub = Object.keys(clubCounts).find(cid => clubCounts[cid] > round.max_players_per_club);
+    if (exceedingClub) {
+      return res.status(400).json({ error: `Exceeded max players from one club (${round.max_players_per_club}).` });
+    }
+
     // 4. Transfer Limit & Chip Logic
     const { data: oldPlayers } = await supabase.from('team_players').select('player_id').eq('team_id', team_id);
-    const isWildcard = activeChips?.includes('wildcard');
+    const oldPlayerIds = oldPlayers.map(p => p.player_id);
     
-    if (isWildcard && roundId) {
+    // Calculate transfers made (players in the new squad that weren't in the old one)
+    const transfersMade = playerIds.filter(pid => !oldPlayerIds.includes(pid)).length;
+    
+    const isWildcard = activeChips?.includes('wildcard');
+    let pointsPenalty = 0;
+
+    if (!isWildcard && oldPlayerIds.length > 0) {
+      const excessTransfers = Math.max(0, transfersMade - round.free_transfers_allowed);
+      pointsPenalty = excessTransfers * 4; // Typical fantasy penalty
+    }
+    
+    if (isWildcard) {
       await supabase.from('user_chips').upsert({ user_id: req.user.id, round_id: roundId, chip_type: 'wildcard' });
     }
 
     // 5. Update team_players (Atomic-like)
+    // We use a transaction-like approach or just delete/insert
     await supabase.from('team_players').delete().eq('team_id', team_id);
     
     const teamPlayersInsert = selectedPlayers.map(p => {
@@ -160,16 +188,39 @@ app.post('/api/transfers', authenticate, validateDeadline, async (req, res) => {
     const { error: insertError } = await supabase.from('team_players').insert(teamPlayersInsert);
     if (insertError) throw insertError;
 
-    // Handle other chips (Triple Captain, Bench Boost)
-    if (activeChips && roundId) {
+    // Log Transfers
+    const transferLogs = selectedPlayers
+      .filter(p => !oldPlayerIds.includes(p.id))
+      .map(p => ({
+        user_id: req.user.id,
+        team_id,
+        round_id: roundId,
+        player_in_id: p.id
+      }));
+    if (transferLogs.length > 0) {
+      await supabase.from('transfer_logs').insert(transferLogs);
+    }
+
+    // Handle other chips (Triple Captain, Bench Boost, 12th Man)
+    if (activeChips && activeChips.length > 0) {
        for (const chip of activeChips) {
           if (chip !== 'wildcard') {
-             await supabase.from('user_chips').upsert({ user_id: req.user.id, round_id: roundId, chip_type: chip });
+             await supabase.from('user_chips').upsert({ 
+               user_id: req.user.id, 
+               round_id: roundId, 
+               chip_type: chip 
+             });
           }
        }
     }
 
-    res.json({ success: true, budget_used: totalPrice, chips_applied: activeChips });
+    res.json({ 
+      success: true, 
+      budget_used: totalPrice, 
+      transfers_made: transfersMade,
+      points_deducted: pointsPenalty,
+      chips_applied: activeChips 
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -229,6 +280,119 @@ app.post('/api/admin/auto-subs', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// Admin: Calculate Points for a Round
+app.post('/api/admin/calculate-points', async (req, res) => {
+  const { round_id } = req.body;
+  try {
+    const result = await calculateRoundPoints(round_id);
+    res.json({ success: true, message: result });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Points Calculation Engine
+const calculateRoundPoints = async (round_id) => {
+  console.log(`[PointsEngine] Calculating points for round ${round_id}...`);
+  
+  // 1. Fetch all stats for this round
+  const { data: stats, error: statsError } = await supabase
+    .from('player_gameweek_stats')
+    .select('*, players(position)')
+    .eq('round_id', round_id);
+  
+  if (statsError) throw statsError;
+
+  const updates = stats.map(s => {
+    let p = 0;
+    const pos = s.players.position;
+
+    // Minutes
+    if (s.minutes_played >= 60) p += 2;
+    else if (s.minutes_played > 0) p += 1;
+
+    // Goals
+    if (pos === 'FWD') p += s.goals * 4;
+    else if (pos === 'MID') p += s.goals * 5;
+    else if (pos === 'DEF' || pos === 'GK') p += s.goals * 6;
+
+    // Assists
+    p += s.assists * 3;
+
+    // Clean Sheet
+    if (s.clean_sheet) {
+      if (pos === 'DEF' || pos === 'GK') p += 4;
+      else if (pos === 'MID') p += 1;
+    }
+
+    // Saves & Penalties
+    if (pos === 'GK') {
+      p += Math.floor(s.saves / 3);
+      p += s.penalty_saved * 5;
+    }
+
+    // Negative Points
+    if (pos === 'DEF' || pos === 'GK') {
+      p -= Math.floor(s.goals_against / 2);
+    }
+    p -= s.yellow_cards * 1;
+    p -= s.red_cards * 3;
+    p -= s.own_goals * 2;
+    p -= s.penalty_missed * 2;
+
+    return { id: s.id, total_points: p };
+  });
+
+  // Bulk update stats (Supabase upsert)
+  for (const update of updates) {
+    await supabase.from('player_gameweek_stats').update({ total_points: update.total_points }).eq('id', update.id);
+  }
+
+  // 2. Update User Team Points
+  await updateUserTeamPoints(round_id);
+
+  return `Points calculated for ${updates.length} players.`;
+};
+
+const updateUserTeamPoints = async (round_id) => {
+  const { data: teams } = await supabase.from('user_teams').select('id, user_id');
+  
+  for (const team of teams) {
+    const { data: players } = await supabase.from('team_players')
+      .select('*, player_gameweek_stats!inner(*)')
+      .eq('team_id', team.id)
+      .eq('player_gameweek_stats.round_id', round_id);
+
+    const { data: chips } = await supabase.from('user_chips')
+      .select('chip_type')
+      .eq('user_id', team.user_id)
+      .eq('round_id', round_id);
+
+    const activeChips = chips.map(c => c.chip_type);
+    let roundTotal = 0;
+
+    for (const p of players) {
+      let playerPoints = p.player_gameweek_stats[0].total_points;
+
+      // Captain Logic
+      if (p.is_captain) {
+        const multiplier = activeChips.includes('triple_captain') ? 3 : 2;
+        playerPoints *= multiplier;
+      }
+
+      // Starting vs Bench
+      if (p.is_starting || activeChips.includes('bench_boost')) {
+        roundTotal += playerPoints;
+      }
+    }
+
+    await supabase.from('user_teams').update({ 
+      current_gw_points: roundTotal,
+      total_points: team.total_points + roundTotal // Simplified - should ideally sum all GWs
+    }).eq('id', team.id);
+  }
+};
 
 // Auto-Sub Engine (Real Logic)
 const performAutoSubs = async (round_id) => {

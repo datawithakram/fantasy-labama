@@ -21,6 +21,8 @@ interface TeamStore {
   selectedPlayers: TeamPlayer[];
   budget: number;
   activeChips: string[];
+  maxPerClub: number;
+  setMaxPerClub: (limit: number) => void;
   addPlayer: (player: Player) => void;
   removePlayer: (playerId: number) => void;
   swapPlayers: (playerOutId: number, playerInId: number) => void;
@@ -37,13 +39,13 @@ const MAX_PLAYERS = {
   FWD: 3
 };
 
-const MAX_PER_CLUB = 3;
-const INITIAL_BUDGET = 100.0;
-
 export const useTeamStore = create<TeamStore>((set, get) => ({
   selectedPlayers: [],
-  budget: INITIAL_BUDGET,
+  budget: 100.0,
   activeChips: [],
+  maxPerClub: 3,
+
+  setMaxPerClub: (limit: number) => set({ maxPerClub: limit }),
 
   setInitialTeam: (players, budget) => set({ selectedPlayers: players, budget }),
 
@@ -66,7 +68,7 @@ export const useTeamStore = create<TeamStore>((set, get) => ({
     if (state.selectedPlayers.length >= 15) return; 
 
     const clubCount = state.selectedPlayers.filter(p => p.club_id === player.club_id).length;
-    if (clubCount >= MAX_PER_CLUB) return;
+    if (clubCount >= state.maxPerClub) return;
 
     set((state) => {
       const startersInPos = state.selectedPlayers.filter(p => p.position === player.position && p.is_starting).length;

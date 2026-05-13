@@ -116,6 +116,26 @@ const GameControl = () => {
     }
   };
 
+  const handleCalculatePoints = async () => {
+    setMessage(null);
+    if (!window.confirm('Are you sure you want to calculate points? This will update all team scores.')) return;
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/calculate-points`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ round_id: autoSubRoundId })
+      });
+      const result = await response.json();
+      if (result.success) {
+        setMessage({ text: result.message, type: 'success' });
+      } else {
+        setMessage({ text: result.error || 'Failed to calculate points', type: 'error' });
+      }
+    } catch (err) {
+      setMessage({ text: 'Backend Engine connection failed.', type: 'error' });
+    }
+  };
+
   return (
     <div className="space-y-8 max-w-6xl">
       <div>
@@ -237,10 +257,6 @@ const GameControl = () => {
                <h3 className="text-xl font-bold text-white tracking-tight">Engine Control</h3>
             </div>
             
-            <p className="text-slate-400 text-xs leading-relaxed mb-8">
-              Triggering the <span className="text-indigo-400 font-bold">Auto-Subs Engine</span> will process all teams for the selected round, replacing starters who didn't play.
-            </p>
-            
             <div className="space-y-6">
               <div>
                 <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3">Target Round ID</label>
@@ -255,20 +271,29 @@ const GameControl = () => {
                 </div>
               </div>
               
-              <button 
-                onClick={handleAutoSubs}
-                className="glow-button w-full py-4 text-lg group overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
-                <Play className="w-5 h-5 relative z-10" /> 
-                <span className="relative z-10 uppercase tracking-widest">Execute Processing</span>
-              </button>
+              <div className="space-y-3">
+                <button 
+                  onClick={handleCalculatePoints}
+                  className="glow-button w-full py-4 text-lg bg-emerald-600 shadow-emerald-500/20 hover:shadow-emerald-500/40 border-emerald-500/50"
+                >
+                  <CheckCircle2 className="w-5 h-5 relative z-10" /> 
+                  <span className="relative z-10 uppercase tracking-widest">Calculate Points</span>
+                </button>
+
+                <button 
+                  onClick={handleAutoSubs}
+                  className="glow-button w-full py-4 text-lg"
+                >
+                  <RotateCcw className="w-5 h-5 relative z-10" /> 
+                  <span className="relative z-10 uppercase tracking-widest">Run Auto-Subs</span>
+                </button>
+              </div>
 
               <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/10">
                  <div className="flex gap-3">
                     <AlertCircle className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
                     <p className="text-[10px] text-blue-400/80 leading-normal font-medium uppercase tracking-tight">
-                      This action is final and will affect all live teams. Run only after official match stats are finalized.
+                      These actions are final. Run "Calculate Points" first, then "Run Auto-Subs" after all matches are over.
                     </p>
                  </div>
               </div>

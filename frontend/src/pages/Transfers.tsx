@@ -15,15 +15,68 @@ interface Club {
 
 export function Transfers() {
   const { user } = useStore();
-  const { selectedPlayers, budget, addPlayer, removePlayer } = useTeamStore();
+  const { selectedPlayers, budget, addPlayer, removePlayer, maxPerClub, setMaxPerClub } = useTeamStore();
+  const [initialPlayerIds, setInitialPlayerIds] = useState<number[]>([]);
   const [players, setPlayers] = useState<any[]>([]);
   const [clubs, setClubs] = useState<Record<number, Club>>({});
   const [, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ text: string, type: 'success' | 'error' } | null>(null);
 
-  const [, setCurrentRound] = useState<any>(null);
+  const [currentRound, setCurrentRound] = useState<any>(null);
   const [deadlinePassed, setDeadlinePassed] = useState(false);
+
+  useEffect(() => {
+    async function loadData() {
+      if (!user) return;
+      setLoading(true);
+      try {
+        const [
+          { data: playersData }, 
+          { data: clubsData }, 
+          { data: roundData },
+          { data: teamData }
+        ] = await Promise.all([
+          supabase.from('players').select('*'),
+          supabase.from('clubs').select('*'),
+          supabase.from('rounds').select('*').eq('is_current', true).maybeSingle(),
+          supabase.from('user_teams').select('id').eq('user_id', user.id).single()
+        ]);
+
+        if (playersData) setPlayers(playersData);
+        if (clubsData) {
+          const clubMap = clubsData.reduce((acc, club) => {
+            acc[club.id] = club;
+            return acc;
+          }, {} as Record<number, Club>);
+          setClubs(clubMap);
+        }
+        
+        if (roundData) {
+          setCurrentRound(roundData);
+          setMaxPerClub(roundData.max_players_per_club || 3);
+          if (new Date() > new Date(roundData.deadline_time)) {
+            setDeadlinePassed(true);
+          }
+        }
+
+        if (teamData) {
+           const { data: teamPlayers } = await supabase
+             .from('team_players')
+             .select('player_id')
+             .eq('team_id', teamData.id);
+           if (teamPlayers) {
+             setInitialPlayerIds(teamPlayers.map(p => p.player_id));
+           }
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, [user, setMaxPerClub]);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [posFilter, setPosFilter] = useState<Position | 'ALL'>('ALL');
@@ -36,38 +89,12 @@ export function Transfers() {
     player: null
   });
 
-  useEffect(() => {
-    async function loadData() {
-      setLoading(true);
-      try {
-        const [{ data: playersData }, { data: clubsData }, { data: roundData }] = await Promise.all([
-          supabase.from('players').select('*'),
-          supabase.from('clubs').select('*'),
-          supabase.from('rounds').select('*').eq('is_current', true).maybeSingle()
-        ]);
-
-        if (playersData) setPlayers(playersData);
-        if (clubsData) {
-          const clubMap = clubsData.reduce((acc, club) => {
-            acc[club.id] = club;
-            return acc;
-          }, {} as Record<number, Club>);
-          setClubs(clubMap);
-        }
-        if (roundData) {
-          setCurrentRound(roundData);
-          if (new Date() > new Date(roundData.deadline_time)) {
-            setDeadlinePassed(true);
-          }
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadData();
-  }, []);
+  const transfersMade = selectedPlayers.filter(p => !initialPlayerIds.includes(p.id)).length;
+  const isWildcard = useTeamStore.getState().activeChips.includes('wildcard');
+  const freeLimit = currentRound?.free_transfers_allowed || 0;
+  const pointsCost = (!isWildcard && initialPlayerIds.length > 0) 
+    ? Math.max(0, transfersMade - freeLimit) * 4 
+    : 0;
 
   const handleConfirmTransfers = async () => {
     if (!user) {
@@ -211,6 +238,28 @@ export function Transfers() {
                   <p className="text-lg md:text-2xl font-black text-emerald-500">£{budget.toFixed(1)}m</p>
                </div>
             </div>
+            
+            <div className="fantasy-card flex-1 p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-gradient-to-br from-[var(--card)] to-[var(--muted)] border-l-4 border-amber-500">
+               <div className="p-2 md:p-3 bg-amber-500/10 rounded-xl md:rounded-2xl text-amber-500"><ArrowRightLeft className="w-5 h-5 md:w-6 md:h-6" /></div>
+               <div>
+                  <p className="text-[8px] md:text-[10px] font-black text-[var(--muted-foreground)] uppercase tracking-widest">Transfers</p>
+                  <p className="text-lg md:text-2xl font-black">
+                    {transfersMade} 
+                    <span className="text-[10px] md:text-xs text-[var(--muted-foreground)] font-bold ml-1">
+                       (Free: {freeLimit})
+                    </span>
+                  </p>
+               </div>
+            </div>
+
+            {pointsCost > 0 && (
+              <div className="fantasy-card flex-1 p-4 md:p-5 flex items-center gap-3 md:gap-4 bg-rose-500/10 border-l-4 border-rose-500 animate-pulse">
+                <div>
+                   <p className="text-[8px] md:text-[10px] font-black text-rose-500 uppercase tracking-widest">Cost</p>
+                   <p className="text-lg md:text-2xl font-black text-rose-500">-{pointsCost} pts</p>
+                </div>
+              </div>
+            )}
          </div>
          
          <div className="flex items-center gap-3 md:gap-4">
@@ -419,7 +468,7 @@ export function Transfers() {
               <div className="p-4 bg-[var(--muted)]/50 border-t border-[var(--border)]">
                  <div className="flex items-center gap-3 text-[9px] font-bold text-[var(--muted-foreground)] uppercase tracking-tighter leading-tight">
                     <Info className="w-4 h-4 text-[var(--primary)] shrink-0" />
-                    <p>Max 3 players per club. Maintain 15 players within £100m. Transferred players must match position of removed players.</p>
+                    <p>Max {maxPerClub} players per club. Maintain 15 players within £100m. Transferred players must match position of removed players.</p>
                  </div>
               </div>
            </div>
